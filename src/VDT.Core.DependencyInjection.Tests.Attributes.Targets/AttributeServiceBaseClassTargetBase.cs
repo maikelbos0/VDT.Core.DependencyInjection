@@ -2,7 +2,5 @@
 
 namespace VDT.Core.DependencyInjection.Tests.Attributes.Targets {
     [SingletonService(typeof(AttributeServiceBaseClassTarget))]
-    public abstract class AttributeServiceBaseClassTargetBase {
-        public abstract string GetValue();
-    }
+    public abstract class AttributeServiceBaseClassTargetBase { }
 }

@@ -29,13 +29,14 @@ namespace VDT.Core.DependencyInjection.Attributes {
             // Attributes on service class types
             options.AddServiceTypeProvider(
                 implementationType => {
-                    var currentServiceType = implementationType.BaseType;
+                    var currentServiceType = implementationType;
                     var serviceTypes = new List<Type>();
 
-                    while (currentServiceType != null) {
+                    do {
                         serviceTypes.Add(currentServiceType);
                         currentServiceType = currentServiceType.BaseType;
                     }
+                    while (currentServiceType != null);
 
                     return serviceTypes.Where(serviceType => serviceType.GetCustomAttributes(typeof(IServiceAttribute), false).Any());
                 },
