@@ -17,6 +17,52 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
+        public async Task Add_Adds_DecoratorInjectors() {
+            services.Add(
+                typeof(IServiceCollectionTarget),
+                typeof(ServiceCollectionTarget),
+                typeof(ServiceCollectionTarget),
+                ServiceLifetime.Singleton,
+                options => {
+                    options.AddDecorator<TestDecorator>();
+                    options.AddDecorator<TestDecorator>();
+                }
+            );
+
+            var serviceProvider = services.BuildServiceProvider();
+            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
+
+            Assert.Equal("Bar", await proxy.GetValue());
+
+            Assert.Equal(2, decorator.Calls);
+        }
+
+        [Fact]
+        public async Task Add_With_Factory_Adds_DecoratorInjectors() {
+            services.Add(
+                typeof(IServiceCollectionTarget),
+                typeof(ServiceCollectionTarget),
+                typeof(ServiceCollectionTarget),
+                serviceProvider => new ServiceCollectionTarget {
+                    Value = "Foo"
+                },
+                ServiceLifetime.Singleton,
+                options => {
+                    options.AddDecorator<TestDecorator>();
+                    options.AddDecorator<TestDecorator>();
+                }
+            );
+
+            var serviceProvider = services.BuildServiceProvider();
+            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
+
+            Assert.Equal("Foo", await proxy.GetValue());
+
+            Assert.Equal(2, decorator.Calls);
+        }
+
+        // TODO clean up tests
+        [Fact]
         public async Task AddTransient_Adds_DecoratorInjectors() {
             services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();

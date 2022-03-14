@@ -238,6 +238,49 @@ namespace VDT.Core.DependencyInjection.Decorators {
 
 
         // TODO remove implementationServiceType after refactor
+
+        /// <summary>
+        /// Adds a service of given service and implementation type to the specified <see cref="IServiceCollection"/>
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="serviceType">The type of the service to add</param>
+        /// <param name="implementationServiceType">The type with which the implementation will be registered and resolved</param>
+        /// <param name="implementationType">The type of the implementation to use</param>
+        /// <param name="serviceLifetime">Service lifetime to use</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+            return AddInternal(services, serviceType, implementationServiceType, implementationType, null, serviceLifetime, setupAction);
+        }
+
+        /// <summary>
+        /// Adds a service of given service and implementation type to the specified <see cref="IServiceCollection"/> using the provided factory
+        /// </summary>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="serviceType">The type of the service to add</param>
+        /// <param name="implementationServiceType">The type with which the implementation will be registered and resolved</param>
+        /// <param name="implementationType">The type of the implementation to use</param>
+        /// <param name="implementationFactory">The factory that creates the service</param>
+        /// <param name="serviceLifetime">Service lifetime to use</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object> implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+            return AddInternal(services, serviceType, implementationServiceType, implementationType, implementationFactory, serviceLifetime, setupAction);
+        }
+        
+        private static IServiceCollection AddInternal(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+            services.AddProxy(serviceType, implementationServiceType, implementationType, serviceLifetime, setupAction);
+
+            if (implementationFactory != null) {
+                services.Add(new ServiceDescriptor(implementationServiceType, implementationFactory, serviceLifetime));
+            }
+            else {
+                services.Add(new ServiceDescriptor(implementationServiceType, implementationType, serviceLifetime));
+            }
+
+            return services;
+        }
+
         private static void AddProxy(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
             var options = GetDecoratorOptions(serviceType, implementationType, setupAction);
             var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationServiceType, options);
