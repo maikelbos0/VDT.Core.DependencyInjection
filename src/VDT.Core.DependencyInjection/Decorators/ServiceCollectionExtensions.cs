@@ -236,6 +236,55 @@ namespace VDT.Core.DependencyInjection.Decorators {
                 .AddSingleton<TImplementationService, TImplementation>(implementationFactory);
         }
 
+
+        // TODO remove implementationServiceType after refactor
+        private static void AddProxy(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+            var options = GetDecoratorOptions(serviceType, implementationType, setupAction);
+            var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationServiceType, options);
+
+            services.Add(new ServiceDescriptor(serviceType, proxyFactory, serviceLifetime));
+        }
+
+        private static DecoratorOptions GetDecoratorOptions(Type serviceType, Type implementationType, Action<DecoratorOptions> setupAction) {
+            var options = new DecoratorOptions(serviceType, implementationType);
+            setupAction(options);
+
+            return options;
+        }
+
+        private static Func<IServiceProvider, object> GetDecoratedProxyFactory(Type serviceType, Type implementationServiceType, DecoratorOptions options) {
+            var generator = new Castle.DynamicProxy.ProxyGenerator();
+            var isInterface = serviceType.IsInterface;
+            object?[]? constructorArguments = null;
+
+            if (!isInterface) {
+                // We need to supply constructor arguments; the actual content does not matter since only overridable methods will be called
+                var constructor = serviceType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                    .FirstOrDefault(c => !c.IsPrivate);
+
+                if (constructor == null) {
+                    throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one accessible constructor.");
+                }
+
+                constructorArguments = Enumerable.Range(0, constructor.GetParameters().Length)
+                    .Select(i => (object?)null)
+                    .ToArray();
+            }
+
+            return serviceProvider => {
+                var target = serviceProvider.GetRequiredService(implementationServiceType);
+                var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
+
+                if (isInterface) {
+                    return generator.CreateInterfaceProxyWithTarget(serviceType, target, decorators);
+                }
+                else {
+                    return generator.CreateClassProxyWithTarget(serviceType, target, constructorArguments, decorators);
+                }
+            };
+        }
+
+        // TODO remove below when unused
         private static IServiceCollection AddProxy<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceCollection, Func<IServiceProvider, TService>, IServiceCollection> registerProxy, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
