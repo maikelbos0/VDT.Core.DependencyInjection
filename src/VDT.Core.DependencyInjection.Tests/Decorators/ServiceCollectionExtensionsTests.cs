@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Threading.Tasks;
 using VDT.Core.DependencyInjection.Decorators;
 using VDT.Core.DependencyInjection.Tests.Decorators.Targets;
@@ -153,12 +154,19 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddTransient_Always_Returns_New_Object() {
+        public void AddTransient_Registers_Services_As_Transient() {
             services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(options => { });
 
-            var serviceProvider = services.BuildServiceProvider();
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Transient, s.Lifetime));
+        }
 
-            Assert.NotSame(serviceProvider.GetRequiredService<IServiceCollectionTarget>(), serviceProvider.GetRequiredService<IServiceCollectionTarget>());
+        [Fact]
+        public void AddTransient_With_Factory_Registers_Services_As_Transient() {
+            services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
+
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Transient, s.Lifetime));
         }
 
         [Fact]
@@ -252,14 +260,19 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddScoped_Returns_Same_Object_Within_Same_Scope() {
+        public void AddScoped_Registers_Services_As_Scoped() {
             services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(options => { });
 
-            var serviceProvider = services.BuildServiceProvider();
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Scoped, s.Lifetime));
+        }
 
-            using (var scope = serviceProvider.CreateScope()) {
-                Assert.Same(scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>(), scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>());
-            }
+        [Fact]
+        public void AddScoped_With_Factory_Registers_Services_As_Scoped() {
+            services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
+
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Scoped, s.Lifetime));
         }
 
         [Fact]
@@ -369,19 +382,19 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddSingleton_Always_Returns_Same_Object() {
+        public void AddSingleton_Registers_Services_As_Singleton() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(options => { });
 
-            var serviceProvider = services.BuildServiceProvider();
-            IServiceCollectionTarget singletonTarget;
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Singleton, s.Lifetime));
+        }
 
-            using (var scope = serviceProvider.CreateScope()) {
-                singletonTarget = scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>();
-            }
+        [Fact]
+        public void AddSingleton_With_Factory_Registers_Services_As_Singleton() {
+            services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
 
-            using (var scope = serviceProvider.CreateScope()) {
-                Assert.Same(singletonTarget, scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>());
-            }
+            Assert.All(services.Where(s => !typeof(IDecorator).IsAssignableFrom(s.ServiceType)), s => Assert.Equal(ServiceLifetime.Singleton, s.Lifetime));
         }
 
         [Fact]
