@@ -79,11 +79,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddTransient_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
-        }
-
-        [Fact]
         public async Task AddTransient_With_ImplementationTarget_Adds_DecoratorInjectors() {
             services.AddTransient<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
@@ -97,11 +92,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddTransient_With_ImplementationTarget_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
         }
 
         [Fact]
@@ -122,13 +112,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddTransient_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
-        }
-
-        [Fact]
         public async Task AddTransient_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
             services.AddTransient<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
@@ -144,13 +127,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddTransient_With_ImplementationTarget_And_Factory_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
         }
 
         [Fact]
@@ -185,11 +161,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddScoped_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
-        }
-
-        [Fact]
         public async Task AddScoped_With_ImplementationTarget_Adds_DecoratorInjectors() {
             services.AddScoped<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
@@ -203,11 +174,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddScoped_With_ImplementationTarget_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
         }
 
         [Fact]
@@ -228,13 +194,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddScoped_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
-        }
-
-        [Fact]
         public async Task AddScoped_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
             services.AddScoped<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
@@ -250,13 +209,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddScoped_With_ImplementationTarget_And_Factory_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
         }
 
         [Fact]
@@ -307,11 +259,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddSingleton_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
-        }
-
-        [Fact]
         public async Task AddSingleton_With_ImplementationTarget_Adds_DecoratorInjectors() {
             services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
@@ -325,11 +272,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddSingleton_With_ImplementationTarget_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
         }
 
         [Fact]
@@ -350,13 +292,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddSingleton_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
-        }
-
-        [Fact]
         public async Task AddSingleton_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
             services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
@@ -372,13 +307,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
             Assert.Equal(2, decorator.Calls);
             Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
-        }
-
-        [Fact]
-        public void AddSingleton_With_ImplementationTarget_And_Factory_Throws_Exception_For_Equal_Service_And_ImplementationService() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
         }
 
         [Fact]
