@@ -39,7 +39,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), ServiceLifetime.Transient, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), implementationFactory, ServiceLifetime.Transient, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), ServiceLifetime.Scoped, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped, setupAction);
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), implementationFactory, ServiceLifetime.Scoped, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Scoped, setupAction);
         }
 
         /// <summary>
@@ -183,7 +183,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), ServiceLifetime.Singleton, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton, setupAction);
         }
 
         /// <summary>
@@ -221,7 +221,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementationService), typeof(TImplementation), implementationFactory, ServiceLifetime.Singleton, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Singleton, setupAction);
         }
 
 
@@ -232,12 +232,11 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="serviceType">The type of the service to add</param>
-        /// <param name="implementationServiceType">The type with which the implementation will be registered and resolved</param>
         /// <param name="implementationType">The type of the implementation to use</param>
         /// <param name="serviceLifetime">Service lifetime to use</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
             return AddInternal(services, serviceType, implementationType, null, serviceLifetime, setupAction);
         }
 
@@ -246,13 +245,12 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="serviceType">The type of the service to add</param>
-        /// <param name="implementationServiceType">The type with which the implementation will be registered and resolved</param>
         /// <param name="implementationType">The type of the implementation to use</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="serviceLifetime">Service lifetime to use</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object> implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+        public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object> implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
             return AddInternal(services, serviceType, implementationType, implementationFactory, serviceLifetime, setupAction);
         }
         
@@ -297,6 +295,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
                     throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one accessible constructor.");
                 }
 
+                // TODO perhaps use same services for proxy and implementation
                 constructorArguments = Enumerable.Range(0, constructor.GetParameters().Length)
                     .Select(i => (object?)null)
                     .ToArray();

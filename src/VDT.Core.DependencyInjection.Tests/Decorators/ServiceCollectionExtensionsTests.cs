@@ -22,7 +22,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             services.Add(
                 typeof(IServiceCollectionTarget),
                 typeof(ServiceCollectionTarget),
-                typeof(ServiceCollectionTarget),
                 ServiceLifetime.Singleton,
                 options => {
                     options.AddDecorator<TestDecorator>();
@@ -41,7 +40,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         public async Task Add_With_Factory_Adds_DecoratorInjectors() {
             services.Add(
                 typeof(IServiceCollectionTarget),
-                typeof(ServiceCollectionTarget),
                 typeof(ServiceCollectionTarget),
                 serviceProvider => new ServiceCollectionTarget {
                     Value = "Foo"
