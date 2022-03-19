@@ -238,7 +238,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
-            return AddInternal(services, serviceType, implementationServiceType, implementationType, null, serviceLifetime, setupAction);
+            return AddInternal(services, serviceType, implementationType, null, serviceLifetime, setupAction);
         }
 
         /// <summary>
@@ -253,10 +253,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         public static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object> implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
-            return AddInternal(services, serviceType, implementationServiceType, implementationType, implementationFactory, serviceLifetime, setupAction);
+            return AddInternal(services, serviceType, implementationType, implementationFactory, serviceLifetime, setupAction);
         }
         
-        private static IServiceCollection AddInternal(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+        private static IServiceCollection AddInternal(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
             services.AddProxy(serviceType, implementationType, serviceLifetime, setupAction);
 
             if (implementationFactory != null) {
