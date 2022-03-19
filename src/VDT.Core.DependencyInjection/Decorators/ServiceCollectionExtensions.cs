@@ -257,21 +257,21 @@ namespace VDT.Core.DependencyInjection.Decorators {
         }
         
         private static IServiceCollection AddInternal(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
-            services.AddProxy(serviceType, implementationServiceType, implementationType, serviceLifetime, setupAction);
+            services.AddProxy(serviceType, implementationType, serviceLifetime, setupAction);
 
             if (implementationFactory != null) {
-                services.Add(new ServiceDescriptor(implementationServiceType, implementationFactory, serviceLifetime));
+                services.Add(new ServiceDescriptor(implementationType, implementationFactory, serviceLifetime));
             }
             else {
-                services.Add(new ServiceDescriptor(implementationServiceType, implementationType, serviceLifetime));
+                services.Add(new ServiceDescriptor(implementationType, implementationType, serviceLifetime));
             }
 
             return services;
         }
 
-        private static void AddProxy(this IServiceCollection services, Type serviceType, Type implementationServiceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
+        private static void AddProxy(this IServiceCollection services, Type serviceType, Type implementationType, ServiceLifetime serviceLifetime, Action<DecoratorOptions> setupAction) {
             var options = GetDecoratorOptions(serviceType, implementationType, setupAction);
-            var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationServiceType, options);
+            var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationType, options);
 
             services.Add(new ServiceDescriptor(serviceType, proxyFactory, serviceLifetime));
         }
@@ -283,7 +283,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return options;
         }
 
-        private static Func<IServiceProvider, object> GetDecoratedProxyFactory(Type serviceType, Type implementationServiceType, DecoratorOptions options) {
+        private static Func<IServiceProvider, object> GetDecoratedProxyFactory(Type serviceType, Type implementationType, DecoratorOptions options) {
             var generator = new Castle.DynamicProxy.ProxyGenerator();
             var isInterface = serviceType.IsInterface;
             object?[]? constructorArguments = null;
@@ -303,7 +303,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             }
 
             return serviceProvider => {
-                var target = serviceProvider.GetRequiredService(implementationServiceType);
+                var target = serviceProvider.GetRequiredService(implementationType);
                 var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
 
                 if (isInterface) {

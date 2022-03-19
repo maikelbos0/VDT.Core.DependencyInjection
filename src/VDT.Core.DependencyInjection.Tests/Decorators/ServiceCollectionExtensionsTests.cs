@@ -34,7 +34,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -58,7 +57,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -74,7 +72,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -89,9 +86,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -107,7 +102,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -124,9 +118,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -156,7 +148,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -171,9 +162,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -189,7 +178,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -206,9 +194,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -228,22 +214,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddScoped_Returns_New_Object_Within_Different_Scopes() {
-            services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(options => { });
-
-            var serviceProvider = services.BuildServiceProvider();
-            IServiceCollectionTarget scopedTarget;
-
-            using (var scope = serviceProvider.CreateScope()) {
-                scopedTarget = scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>();
-            }
-
-            using (var scope = serviceProvider.CreateScope()) {
-                Assert.NotSame(scopedTarget, scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>());
-            }
-        }
-
-        [Fact]
         public async Task AddSingleton_Adds_DecoratorInjectors() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
@@ -254,7 +224,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -269,9 +238,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -287,7 +254,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
 
@@ -304,9 +270,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.Equal("Foo", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
-            Assert.Null(serviceProvider.GetService<ServiceCollectionTarget>());
         }
 
         [Fact]
@@ -336,7 +300,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var proxy = serviceProvider.GetRequiredService<ServiceCollectionTargetBase>();
 
             Assert.Equal("Bar", await proxy.GetValue());
-
             Assert.Equal(2, decorator.Calls);
         }
     }
