@@ -21,7 +21,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddTransient<TService, TImplementation, TImplementation>(setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -34,12 +34,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Transient, setupAction);
+            return services.AddTransient<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -57,7 +58,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddTransient<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -72,12 +73,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Transient, setupAction);
+            return services.AddTransient<TService, TImplementation>(implementationFactory, setupAction);
         }
 
         /// <summary>
@@ -93,7 +95,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddScoped<TService, TImplementation, TImplementation>(setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped, setupAction);
         }
 
         /// <summary>
@@ -106,12 +108,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped, setupAction);
+            return services.AddScoped<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -129,7 +132,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddScoped<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Scoped, setupAction);
         }
 
         /// <summary>
@@ -144,12 +147,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Scoped, setupAction);
+            return services.AddScoped<TService, TImplementation>(implementationFactory, setupAction);
         }
 
         /// <summary>
@@ -164,8 +168,8 @@ namespace VDT.Core.DependencyInjection.Decorators {
         public static IServiceCollection AddSingleton<TService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
-
-            return services.AddSingleton<TService, TImplementation, TImplementation>(setupAction);
+                        
+            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton, setupAction);
         }
 
         /// <summary>
@@ -178,12 +182,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton, setupAction);
+            return services.AddSingleton<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -201,7 +206,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddSingleton<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Singleton, setupAction);
         }
 
         /// <summary>
@@ -216,16 +221,14 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete("The implementation service type is no longer supported and only the service type and implementation type will be used for registration")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return Add(services, typeof(TService), typeof(TImplementation), implementationFactory, ServiceLifetime.Singleton, setupAction);
+            return services.AddSingleton<TService, TImplementation>(implementationFactory, setupAction);
         }
-
-
-        // TODO remove implementationServiceType after refactor
 
         /// <summary>
         /// Adds a service of given service and implementation type to the specified <see cref="IServiceCollection"/>

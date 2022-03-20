@@ -77,38 +77,8 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddTransient_With_ImplementationTarget_Adds_DecoratorInjectors() {
-            services.AddTransient<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Bar", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
         public async Task AddTransient_With_Factory_Adds_DecoratorInjectors() {
             services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Foo", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
-        public async Task AddTransient_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
-            services.AddTransient<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
                 options.AddDecorator<TestDecorator>();
@@ -153,38 +123,8 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddScoped_With_ImplementationTarget_Adds_DecoratorInjectors() {
-            services.AddScoped<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Bar", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
         public async Task AddScoped_With_Factory_Adds_DecoratorInjectors() {
             services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Foo", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
-        public async Task AddScoped_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
-            services.AddScoped<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
                 options.AddDecorator<TestDecorator>();
@@ -229,38 +169,8 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddSingleton_With_ImplementationTarget_Adds_DecoratorInjectors() {
-            services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Bar", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
         public async Task AddSingleton_With_Factory_Adds_DecoratorInjectors() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => {
-                options.AddDecorator<TestDecorator>();
-                options.AddDecorator<TestDecorator>();
-            });
-
-            var serviceProvider = services.BuildServiceProvider();
-            var proxy = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
-
-            Assert.Equal("Foo", await proxy.GetValue());
-            Assert.Equal(2, decorator.Calls);
-        }
-
-        [Fact]
-        public async Task AddSingleton_With_ImplementationTarget_And_Factory_Adds_DecoratorInjectors() {
-            services.AddSingleton<IServiceCollectionTarget, IServiceCollectionTargetImplementation, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
                 options.AddDecorator<TestDecorator>();
