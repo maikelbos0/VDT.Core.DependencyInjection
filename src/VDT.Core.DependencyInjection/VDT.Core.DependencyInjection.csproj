@@ -10,9 +10,11 @@
 		<PackageId>VDT.Core.DependencyInjection</PackageId>
 		<Version>2.1.2</Version>
 		<Title>VDT.Core.DependencyInjection</Title>
+		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Flexible dependency injection extensions for convention-based service registration, attribute-based service registration, custom automatic service registration and decorator pattern</Description>
 		<PackageReleaseNotes>- Moved project to separate repository
-- Updated dependencies</PackageReleaseNotes>
+- Updated dependencies
+- Added package icon</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2021 Maikel Bos</Copyright>
@@ -28,6 +30,7 @@
 
 	<ItemGroup>
 		<None Include="README.md" pack="true" PackagePath="." />
+		<None Include="icon_128.png" pack="true" PackagePath="." />
 	</ItemGroup>
 
 	<ItemGroup>
