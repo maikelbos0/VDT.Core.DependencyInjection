@@ -8,13 +8,13 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.DependencyInjection</PackageId>
-		<Version>2.1.2</Version>
+		<Version>3.0.0</Version>
 		<Title>VDT.Core.DependencyInjection</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Flexible dependency injection extensions for convention-based service registration, attribute-based service registration, custom automatic service registration and decorator pattern</Description>
-		<PackageReleaseNotes>- Moved project to separate repository
-- Updated dependencies
-- Added package icon</PackageReleaseNotes>
+		<PackageReleaseNotes>- Removed explicit .net core 3.1 and .net 5.0 support
+- Added explicit .net 7.0 support
+- Downgraded unnecessarily high Castle.Core reference</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2021 Maikel Bos</Copyright>
