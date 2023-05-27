@@ -21,7 +21,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddTransient<TService, TImplementation, TImplementation>(setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
+                .AddTransient<TImplementation, TImplementation>();
         }
 
         /// <summary>
@@ -34,14 +36,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
-                .AddTransient<TImplementationService, TImplementation>();
+            return services.AddTransient<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -59,7 +60,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddTransient<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
+                .AddTransient<TImplementation, TImplementation>(implementationFactory);
         }
 
         /// <summary>
@@ -74,14 +77,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
-                .AddTransient<TImplementationService, TImplementation>(implementationFactory);
+            return services.AddTransient<TService, TImplementation>(implementationFactory, setupAction);
         }
 
         /// <summary>
@@ -97,7 +99,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddScoped<TService, TImplementation, TImplementation>(setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
+                .AddScoped<TImplementation, TImplementation>();
         }
 
         /// <summary>
@@ -110,14 +114,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
-                .AddScoped<TImplementationService, TImplementation>();
+            return services.AddScoped<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -135,7 +138,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddScoped<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
+                .AddScoped<TImplementation, TImplementation>(implementationFactory);
+
         }
 
         /// <summary>
@@ -150,14 +156,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
-                .AddScoped<TImplementationService, TImplementation>(implementationFactory);
+            return services.AddScoped<TService, TImplementation>(implementationFactory, setupAction);
         }
 
         /// <summary>
@@ -173,7 +178,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddSingleton<TService, TImplementation, TImplementation>(setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
+                .AddSingleton<TImplementation, TImplementation>();
         }
 
         /// <summary>
@@ -186,14 +193,13 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
-                .AddSingleton<TImplementationService, TImplementation>();
+            return services.AddSingleton<TService, TImplementation>(setupAction);
         }
 
         /// <summary>
@@ -211,7 +217,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services.AddSingleton<TService, TImplementation, TImplementation>(implementationFactory, setupAction);
+            return services
+                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
+                .AddSingleton(implementationFactory);
         }
 
         /// <summary>
@@ -226,25 +234,23 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementationService : class, TService
             where TImplementation : class, TImplementationService {
 
-            return services
-                .AddProxy<TService, TImplementationService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
-                .AddSingleton<TImplementationService, TImplementation>(implementationFactory);
+            return services.AddSingleton<TService, TImplementation>(implementationFactory, setupAction);
         }
 
-        private static IServiceCollection AddProxy<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceCollection, Func<IServiceProvider, TService>, IServiceCollection> registerProxy, Action<DecoratorOptions> setupAction)
+        private static IServiceCollection AddProxy<TService, TImplementation>(this IServiceCollection services, Func<IServiceCollection, Func<IServiceProvider, TService>, IServiceCollection> registerProxy, Action<DecoratorOptions> setupAction)
             where TService : class
-            where TImplementationService : class, TService
-            where TImplementation : class, TImplementationService {
+            where TImplementation : class, TService {
 
-            VerifyRegistration<TService, TImplementationService>();
+            VerifyRegistration<TService, TImplementation>();
 
             var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
-            var proxyFactory = GetDecoratedProxyFactory<TService, TImplementationService>(options);
+            var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
 
             return registerProxy(services, proxyFactory);
         }
@@ -268,9 +274,9 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return options;
         }
 
-        private static Func<IServiceProvider, TService> GetDecoratedProxyFactory<TService, TImplementationService>(DecoratorOptions options)
+        private static Func<IServiceProvider, TService> GetDecoratedProxyFactory<TService, TImplementation>(DecoratorOptions options)
             where TService : class
-            where TImplementationService : class, TService {
+            where TImplementation : class, TService {
 
             var generator = new Castle.DynamicProxy.ProxyGenerator();
             var isInterface = typeof(TService).IsInterface;
@@ -291,7 +297,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             }
 
             return serviceProvider => {
-                var target = serviceProvider.GetRequiredService<TImplementationService>();
+                var target = serviceProvider.GetRequiredService<TImplementation>();
                 var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
 
                 if (isInterface) {

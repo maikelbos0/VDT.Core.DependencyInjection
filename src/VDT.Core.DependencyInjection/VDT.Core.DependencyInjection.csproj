@@ -4,6 +4,7 @@
 		<TargetFrameworks>netstandard2.1;net6.0;net7.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<WarningsAsErrors>nullable</WarningsAsErrors>
+		<LangVersion>10.0</LangVersion>
 	</PropertyGroup>
 
 	<PropertyGroup>
