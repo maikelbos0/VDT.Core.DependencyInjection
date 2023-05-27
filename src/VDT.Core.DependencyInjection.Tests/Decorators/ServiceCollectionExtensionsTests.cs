@@ -43,7 +43,14 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
         [Fact]
         public void AddTransient_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
+            Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(options => {
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddTransient_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(options => { });
         }
 
         [Fact]
@@ -79,7 +86,16 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         public void AddTransient_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
             Assert.Throws<ServiceRegistrationException>(() => services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
-            }, options => { }));
+            }, options => {
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddTransient_With_Factory_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddTransient<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
         }
 
         [Fact]
@@ -118,7 +134,14 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
         [Fact]
         public void AddScoped_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
+            Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(options => {
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddScoped_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(options => { });
         }
 
         [Fact]
@@ -154,7 +177,16 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         public void AddScoped_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
             Assert.Throws<ServiceRegistrationException>(() => services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
-            }, options => { }));
+            }, options => { 
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddScoped_With_Factory_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddScoped<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
         }
 
         [Fact]
@@ -211,7 +243,14 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
 
         [Fact]
         public void AddSingleton_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(options => { }));
+            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(options => {
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddSingleton_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(options => { });
         }
 
         [Fact]
@@ -232,13 +271,6 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public void AddSingleton_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
-            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
-                Value = "Foo"
-            }, options => { }));
-        }
-
-        [Fact]
         public void AddSingleton_With_Factory_Without_Decorators_Does_Not_Register_Proxy() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
@@ -248,6 +280,22 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var service = serviceProvider.GetRequiredService<IServiceCollectionTarget>();
 
             Assert.IsType<ServiceCollectionTarget>(service);
+        }
+
+        [Fact]
+        public void AddSingleton_With_Factory_Throws_Exception_For_Equal_Service_And_Implementation() {
+            Assert.Throws<ServiceRegistrationException>(() => services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => {
+                options.AddDecorator<TestDecorator>();
+            }));
+        }
+
+        [Fact]
+        public void AddSingleton_With_Factory_Without_Decorators_Does_Not_Throw_Exception_For_Equal_Service_And_Implementation() {
+            services.AddSingleton<ServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
+                Value = "Foo"
+            }, options => { });
         }
 
         [Fact]
