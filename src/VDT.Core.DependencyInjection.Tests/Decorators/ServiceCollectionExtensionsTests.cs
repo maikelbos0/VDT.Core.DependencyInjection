@@ -17,7 +17,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddTransient_Adds_DecoratorInjectors() {
+        public async Task AddTransient_Adds_Decorators() {
             services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
                 options.AddDecorator<TestDecorator>();
@@ -37,7 +37,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddTransient_With_Factory_Adds_DecoratorInjectors() {
+        public async Task AddTransient_With_Factory_Adds_Decorators() {
             services.AddTransient<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
@@ -70,7 +70,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddScoped_Adds_DecoratorInjectors() {
+        public async Task AddScoped_Adds_Decorators() {
             services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
                 options.AddDecorator<TestDecorator>();
@@ -90,7 +90,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddScoped_With_Factory_Adds_DecoratorInjectors() {
+        public async Task AddScoped_With_Factory_Adds_Decorators() {
             services.AddScoped<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
@@ -141,7 +141,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddSingleton_Adds_DecoratorInjectors() {
+        public async Task AddSingleton_Adds_Decorators() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
                 options.AddDecorator<TestDecorator>();
@@ -161,7 +161,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task AddSingleton_With_Factory_Adds_DecoratorInjectors() {
+        public async Task AddSingleton_With_Factory_Adds_Decorators() {
             services.AddSingleton<IServiceCollectionTarget, ServiceCollectionTarget>(serviceProvider => new ServiceCollectionTarget {
                 Value = "Foo"
             }, options => {
@@ -201,7 +201,7 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
         }
 
         [Fact]
-        public async Task Registering_With_Base_Class_Adds_DecoratorInjectors() {
+        public async Task Registering_With_Base_Class_Adds_Decorators() {
             services.AddScoped<ServiceCollectionTargetBase, ServiceCollectionTarget>(options => {
                 options.AddDecorator<TestDecorator>();
                 options.AddDecorator<TestDecorator>();
