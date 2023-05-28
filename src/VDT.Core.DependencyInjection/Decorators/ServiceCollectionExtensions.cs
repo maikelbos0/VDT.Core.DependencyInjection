@@ -309,12 +309,12 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return services;
         }
 
-        private static void VerifyRegistration<TService, TImplementationService>()
+        private static void VerifyRegistration<TService, TImplementation>()
             where TService : class
-            where TImplementationService : class, TService {
+            where TImplementation : class, TService {
 
-            if (typeof(TService) == typeof(TImplementationService)) {
-                throw new ServiceRegistrationException($"Implementation service type '{typeof(TImplementationService).FullName}' can not be equal to service type '{typeof(TService).FullName}'.");
+            if (typeof(TService) == typeof(TImplementation)) {
+                throw new ServiceRegistrationException($"Implementation type '{typeof(TImplementation).FullName}' can not be equal to service type '{typeof(TService).FullName}'.");
             }
         }
 
