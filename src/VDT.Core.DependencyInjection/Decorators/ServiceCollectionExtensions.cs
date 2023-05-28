@@ -16,7 +16,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddTransient<TService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -28,12 +31,15 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// Adds a transient service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
@@ -53,7 +59,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddTransient<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -66,13 +75,16 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// using the provided factory
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddTransient<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
@@ -90,7 +102,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddScoped<TService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -102,12 +117,15 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// Adds a scoped service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
@@ -127,7 +145,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddScoped<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -141,13 +162,16 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// using the provided factory
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddScoped<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
@@ -165,7 +189,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddSingleton<TService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -177,12 +204,15 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// Adds a singleton service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Action<DecoratorOptions> setupAction)
             where TService : class
@@ -202,7 +232,10 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         public static IServiceCollection AddSingleton<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
@@ -215,13 +248,16 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// using the provided factory
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
-        /// <typeparam name="TImplementationService">The type with which the implementation will be registered and resolved</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>The type specified in <typeparamref name="TImplementationService"/> needs to be different from the type specified in <typeparamref name="TService"/> since it will be used to resolve the implementation from the service provider</remarks>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
         [Obsolete($"This method has been deprecated because {nameof(TImplementation)} has replaced {nameof(TImplementationService)} as the type under which implementations are registered. It will be removed in a future version.")]
         public static IServiceCollection AddSingleton<TService, TImplementationService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, Action<DecoratorOptions> setupAction)
             where TService : class

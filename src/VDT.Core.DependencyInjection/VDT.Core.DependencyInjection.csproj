@@ -13,8 +13,8 @@
 		<Title>VDT.Core.DependencyInjection</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Flexible dependency injection extensions for convention-based service registration, attribute-based service registration, custom automatic service registration and decorator pattern</Description>
-		<PackageReleaseNotes>- Removed unnecessary decorator proxy generation when a service doesn't require decorators
-- Made it possible to register a service as itself so long as it doesn't require decorators
+		<PackageReleaseNotes>- Removed unnecessary decorator proxy generation when no decorators are applied to a service
+- Made it possible to register a service as itself so long as no decorators are applied
 - Marked the Add... extension methods for decorators that have an explicit service implementation type parameter as obsolete since they offered no benefits over registering an implementation as its own type</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
