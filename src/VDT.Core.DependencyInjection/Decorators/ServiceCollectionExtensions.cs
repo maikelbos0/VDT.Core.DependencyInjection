@@ -21,9 +21,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
-                .AddTransient<TImplementation, TImplementation>();
+            return services.Add<TService, TImplementation>(ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -60,9 +58,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddTransient(proxyFactory), setupAction)
-                .AddTransient<TImplementation, TImplementation>(implementationFactory);
+            return services.Add<TService, TImplementation>(implementationFactory, ServiceLifetime.Transient, setupAction);
         }
 
         /// <summary>
@@ -99,9 +95,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
-                .AddScoped<TImplementation, TImplementation>();
+            return services.Add<TService, TImplementation>(ServiceLifetime.Scoped, setupAction);
         }
 
         /// <summary>
@@ -138,9 +132,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddScoped(proxyFactory), setupAction)
-                .AddScoped<TImplementation, TImplementation>(implementationFactory);
+            return services.Add<TService, TImplementation>(implementationFactory, ServiceLifetime.Scoped, setupAction);
 
         }
 
@@ -178,9 +170,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
-                .AddSingleton<TImplementation, TImplementation>();
+            return services.Add<TService, TImplementation>(ServiceLifetime.Singleton, setupAction);
         }
 
         /// <summary>
@@ -217,9 +207,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            return services
-                .AddProxy<TService, TImplementation>((services, proxyFactory) => services.AddSingleton(proxyFactory), setupAction)
-                .AddSingleton(implementationFactory);
+            return services.Add<TService, TImplementation>(implementationFactory, ServiceLifetime.Singleton, setupAction);
         }
 
         /// <summary>
@@ -243,16 +231,46 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return services.AddSingleton<TService, TImplementation>(implementationFactory, setupAction);
         }
 
-        private static IServiceCollection AddProxy<TService, TImplementation>(this IServiceCollection services, Func<IServiceCollection, Func<IServiceProvider, TService>, IServiceCollection> registerProxy, Action<DecoratorOptions> setupAction)
+        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
 
-            VerifyRegistration<TService, TImplementation>();
+            var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
+
+            if (options.Policies.Any()) {
+                VerifyRegistration<TService, TImplementation>();
+
+                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
+
+                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
+                services.Add(new ServiceDescriptor(typeof(TImplementation), typeof(TImplementation), lifetime));
+            }
+            else {
+                services.Add(new ServiceDescriptor(typeof(TService), typeof(TImplementation), lifetime));
+            }
+
+            return services;
+        }
+
+        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
+            where TService : class
+            where TImplementation : class, TService {
 
             var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
-            var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
 
-            return registerProxy(services, proxyFactory);
+            if (options.Policies.Any()) {
+                VerifyRegistration<TService, TImplementation>();
+
+                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
+
+                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
+                services.Add(new ServiceDescriptor(typeof(TImplementation), implementationFactory, lifetime));
+            }
+            else {
+                services.Add(new ServiceDescriptor(typeof(TService), implementationFactory, lifetime));
+            }
+
+            return services;
         }
 
         private static void VerifyRegistration<TService, TImplementationService>()
