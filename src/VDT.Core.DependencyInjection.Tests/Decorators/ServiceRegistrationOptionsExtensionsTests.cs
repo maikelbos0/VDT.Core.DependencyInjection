@@ -13,7 +13,9 @@ namespace VDT.Core.DependencyInjection.Tests.Decorators {
             var options = new ServiceRegistrationOptions();
             var services = new ServiceCollection();
 
-            options.UseDecoratorServiceRegistrar(decoratorOptions => { });
+            services.AddSingleton(new TestDecorator());
+
+            options.UseDecoratorServiceRegistrar(decoratorOptions => decoratorOptions.AddDecorator<TestDecorator>());
 
             Assert.NotNull(options.ServiceRegistrar);
 

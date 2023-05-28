@@ -2,5 +2,8 @@
 
 namespace VDT.Core.DependencyInjection.Tests.Attributes.Targets {
     [SingletonService(typeof(AttributeServiceInterfaceTarget))]
-    public interface IAttributeServiceInterfaceTarget { }
+    public interface IAttributeServiceInterfaceTarget {
+        [TestDecorator]
+        public void Decorated();
+    }
 }
