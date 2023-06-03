@@ -267,14 +267,42 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return services.AddSingleton<TService, TImplementation>(implementationFactory, setupAction);
         }
 
-        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
+        /// <summary>
+        /// Adds a service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to add</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
+        public static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
 
             return services.Add(typeof(TService), typeof(TImplementation), null, lifetime, setupAction);
         }
 
-        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
+        /// <summary>
+        /// Adds a service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
+        /// using the provided factory
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to add</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="implementationFactory">The factory that creates the service</param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
+        public static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
 
