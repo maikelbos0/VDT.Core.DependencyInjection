@@ -271,7 +271,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
+            var options = GetDecoratorOptions(typeof(TService), typeof(TImplementation), setupAction);
 
             if (options.Policies.Any()) {
                 VerifyRegistration<TService, TImplementation>();
@@ -292,7 +292,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
+            var options = GetDecoratorOptions(typeof(TService), typeof(TImplementation), setupAction);
 
             if (options.Policies.Any()) {
                 VerifyRegistration<TService, TImplementation>();
@@ -318,11 +318,8 @@ namespace VDT.Core.DependencyInjection.Decorators {
             }
         }
 
-        private static DecoratorOptions GetDecoratorOptions<TService, TImplementation>(Action<DecoratorOptions> setupAction)
-            where TService : class
-            where TImplementation : class, TService {
-
-            var options = new DecoratorOptions(typeof(TService), typeof(TImplementation));
+        private static DecoratorOptions GetDecoratorOptions(Type serviceType, Type implementationType, Action<DecoratorOptions> setupAction) {
+            var options = new DecoratorOptions(serviceType, implementationType);
             setupAction(options);
 
             return options;
