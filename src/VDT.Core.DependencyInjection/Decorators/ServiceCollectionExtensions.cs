@@ -271,50 +271,46 @@ namespace VDT.Core.DependencyInjection.Decorators {
             where TService : class
             where TImplementation : class, TService {
 
-            var options = GetDecoratorOptions(typeof(TService), typeof(TImplementation), setupAction);
-
-            if (options.Policies.Any()) {
-                VerifyRegistration<TService, TImplementation>();
-
-                var proxyFactory = GetDecoratedProxyFactory(typeof(TService), typeof(TImplementation), options);
-
-                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
-                services.Add(new ServiceDescriptor(typeof(TImplementation), typeof(TImplementation), lifetime));
-            }
-            else {
-                services.Add(new ServiceDescriptor(typeof(TService), typeof(TImplementation), lifetime));
-            }
-
-            return services;
+            return services.Add(typeof(TService), typeof(TImplementation), null, lifetime, setupAction);
         }
 
         private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
 
-            var options = GetDecoratorOptions(typeof(TService), typeof(TImplementation), setupAction);
+            return services.Add(typeof(TService), typeof(TImplementation), implementationFactory, lifetime, setupAction);
+        }
+
+        internal static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction) {
+            var options = GetDecoratorOptions(serviceType, implementationType, setupAction);
 
             if (options.Policies.Any()) {
-                VerifyRegistration<TService, TImplementation>();
+                VerifyRegistration(serviceType, implementationType);
 
-                var proxyFactory = GetDecoratedProxyFactory(typeof(TService), typeof(TImplementation), options);
+                var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationType, options);
 
-                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
-                services.Add(new ServiceDescriptor(typeof(TImplementation), implementationFactory, lifetime));
+                services.Add(new ServiceDescriptor(serviceType, proxyFactory, lifetime));
+                services.Add(implementationType, implementationType, implementationFactory, lifetime);
             }
             else {
-                services.Add(new ServiceDescriptor(typeof(TService), implementationFactory, lifetime));
+                services.Add(serviceType, implementationType, implementationFactory, lifetime);
             }
 
             return services;
         }
 
-        private static void VerifyRegistration<TService, TImplementation>()
-            where TService : class
-            where TImplementation : class, TService {
+        private static void Add(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime lifetime) {
+            if (implementationFactory == null) {
+                services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
+            }
+            else {
+                services.Add(new ServiceDescriptor(serviceType, implementationFactory, lifetime));
+            }
+        }
 
-            if (typeof(TService) == typeof(TImplementation)) {
-                throw new ServiceRegistrationException($"Implementation type '{typeof(TImplementation).FullName}' can not be equal to service type '{typeof(TService).FullName}'.");
+        private static void VerifyRegistration(Type serviceType, Type implementationType) {
+            if (serviceType == implementationType) {
+                throw new ServiceRegistrationException($"Implementation type '{serviceType.FullName}' can not be equal to service type '{implementationType.FullName}'.");
             }
         }
 
