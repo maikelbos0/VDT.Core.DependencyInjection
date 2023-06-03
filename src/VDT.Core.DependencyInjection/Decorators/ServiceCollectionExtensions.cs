@@ -276,7 +276,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             if (options.Policies.Any()) {
                 VerifyRegistration<TService, TImplementation>();
 
-                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
+                var proxyFactory = GetDecoratedProxyFactory(typeof(TService), typeof(TImplementation), options);
 
                 services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
                 services.Add(new ServiceDescriptor(typeof(TImplementation), typeof(TImplementation), lifetime));
@@ -297,7 +297,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
             if (options.Policies.Any()) {
                 VerifyRegistration<TService, TImplementation>();
 
-                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
+                var proxyFactory = GetDecoratedProxyFactory(typeof(TService), typeof(TImplementation), options);
 
                 services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
                 services.Add(new ServiceDescriptor(typeof(TImplementation), implementationFactory, lifetime));
@@ -328,21 +328,18 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return options;
         }
 
-        private static Func<IServiceProvider, TService> GetDecoratedProxyFactory<TService, TImplementation>(DecoratorOptions options)
-            where TService : class
-            where TImplementation : class, TService {
-
+        private static Func<IServiceProvider, object> GetDecoratedProxyFactory(Type serviceType, Type implementationType, DecoratorOptions options) {
             var generator = new Castle.DynamicProxy.ProxyGenerator();
-            var isInterface = typeof(TService).IsInterface;
+            var isInterface = serviceType.IsInterface;
             object?[]? constructorArguments = null;
 
             if (!isInterface) {
                 // We need to supply constructor arguments; the actual content does not matter since only overridable methods will be called
-                var constructor = typeof(TService).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                var constructor = serviceType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .FirstOrDefault(c => !c.IsPrivate);
 
                 if (constructor == null) {
-                    throw new ServiceRegistrationException($"Service type '{typeof(TService).FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
+                    throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
                 }
 
                 constructorArguments = Enumerable.Range(0, constructor.GetParameters().Length)
@@ -351,14 +348,14 @@ namespace VDT.Core.DependencyInjection.Decorators {
             }
 
             return serviceProvider => {
-                var target = serviceProvider.GetRequiredService<TImplementation>();
+                var target = serviceProvider.GetRequiredService(implementationType);
                 var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
 
                 if (isInterface) {
-                    return generator.CreateInterfaceProxyWithTarget<TService>(target, decorators);
+                    return generator.CreateInterfaceProxyWithTarget(serviceType, target, decorators);
                 }
                 else {
-                    return (TService)generator.CreateClassProxyWithTarget(typeof(TService), target, constructorArguments, decorators);
+                    return generator.CreateClassProxyWithTarget(serviceType, target, constructorArguments, decorators);
                 }
             };
         }
