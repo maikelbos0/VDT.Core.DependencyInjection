@@ -32,7 +32,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -76,7 +76,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
@@ -118,7 +118,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -163,7 +163,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
@@ -205,7 +205,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -249,7 +249,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
