@@ -8,7 +8,8 @@ namespace VDT.Core.DependencyInjection.Decorators {
     /// Options to set up decorators to a service
     /// </summary>
     public sealed class DecoratorOptions {
-        private static readonly MethodInfo addDecoratorMethod = typeof(DecoratorOptions).GetMethod(nameof(AddDecorator), 1, BindingFlags.Public | BindingFlags.Instance, typeof(MethodInfo));
+        private static readonly MethodInfo addDecoratorMethod = typeof(DecoratorOptions).GetMethod(nameof(AddDecorator), new[] { typeof(MethodInfo) })
+             ?? throw new InvalidOperationException($"Method '{typeof(DecoratorOptions).FullName}.{nameof(AddDecorator)}' was not found.");
 
         private readonly Type serviceType;
         private readonly Type implementationType;
