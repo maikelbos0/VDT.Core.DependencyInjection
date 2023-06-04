@@ -7,9 +7,9 @@ using Xunit;
 namespace VDT.Core.DependencyInjection.Tests.Decorators {
     public sealed class DecoratorOptionsTests {
         private readonly DecoratorOptions options = new DecoratorOptions(typeof(IDecoratorOptionsTarget), typeof(DecoratorOptionsTarget));
-        private readonly MethodInfo serviceDecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethod(nameof(IDecoratorOptionsTarget.ServiceDecorated), 0, BindingFlags.Public | BindingFlags.Instance);
-        private readonly MethodInfo implementationDecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethod(nameof(IDecoratorOptionsTarget.ImplementationDecorated), 0, BindingFlags.Public | BindingFlags.Instance);
-        private readonly MethodInfo undecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethod(nameof(IDecoratorOptionsTarget.Undecorated), 0, BindingFlags.Public | BindingFlags.Instance);
+        private readonly MethodInfo serviceDecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethodStrict(nameof(IDecoratorOptionsTarget.ServiceDecorated));
+        private readonly MethodInfo implementationDecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethodStrict(nameof(IDecoratorOptionsTarget.ImplementationDecorated));
+        private readonly MethodInfo undecoratedMethod = typeof(IDecoratorOptionsTarget).GetMethodStrict(nameof(IDecoratorOptionsTarget.Undecorated));
 
         [Fact]
         public void AddDecorator_Without_Predicate_Works() {
