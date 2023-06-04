@@ -370,7 +370,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
 
             return serviceProvider => {
                 var target = serviceProvider.GetRequiredService(implementationType);
-                var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
+                var decorators = options.Policies.Select(p => new DecoratorInterceptor((IDecorator)serviceProvider.GetRequiredService(p.DecoratorType), p.Predicate)).ToArray();
 
                 if (isInterface) {
                     return generator.CreateInterfaceProxyWithTarget(serviceType, target, decorators);

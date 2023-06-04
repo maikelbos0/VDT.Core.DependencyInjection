@@ -44,7 +44,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// <typeparam name="TDecorator">Type of the decorator to add to the services being registered</typeparam>
         /// <param name="predicate">The predicate that methods are tested against to see if <typeparamref name="TDecorator"/> should be used</param>
         public void AddDecorator<TDecorator>(Predicate<MethodInfo> predicate) where TDecorator : class, IDecorator {
-            Policies.Add(new DecoratorPolicy<TDecorator>(predicate));
+            Policies.Add(new DecoratorPolicy(typeof(TDecorator), predicate));
         }
 
         /// <summary>
