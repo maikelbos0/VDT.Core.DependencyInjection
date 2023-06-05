@@ -32,7 +32,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -76,7 +76,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
@@ -118,7 +118,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -163,7 +163,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
@@ -205,7 +205,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
@@ -249,7 +249,7 @@ namespace VDT.Core.DependencyInjection.Decorators {
         /// </summary>
         /// <typeparam name="TService">The type of the service to add</typeparam>
         /// <typeparam name="TImplementationService">This type parameter is obsolete; <typeparamref name="TImplementation"/> will be used for registration of the implementation</typeparam>
-        /// <typeparam name="TImplementation">The type of the implementation to use and register</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
         /// <param name="implementationFactory">The factory that creates the service</param>
         /// <param name="setupAction">The action that sets up the decorators for this service</param>
@@ -267,82 +267,100 @@ namespace VDT.Core.DependencyInjection.Decorators {
             return services.AddSingleton<TService, TImplementation>(implementationFactory, setupAction);
         }
 
-        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
+        /// <summary>
+        /// Adds a service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to add</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
+        public static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
             where TService : class
             where TImplementation : class, TService {
 
-            var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
+            return services.Add(typeof(TService), typeof(TImplementation), null, lifetime, setupAction);
+        }
+
+        /// <summary>
+        /// Adds a service of the type specified in <typeparamref name="TService"/> with an implementation type specified in <typeparamref name="TImplementation"/> to the specified <see cref="IServiceCollection"/>
+        /// using the provided factory
+        /// </summary>
+        /// <typeparam name="TService">The type of the service to add</typeparam>
+        /// <typeparam name="TImplementation">The type of the implementation to use</typeparam>
+        /// <param name="services">The <see cref="IServiceCollection"/> to add the service to</param>
+        /// <param name="implementationFactory">The factory that creates the service</param>
+        /// <param name="lifetime">The <see cref="ServiceLifetime"/> of the service</param>
+        /// <param name="setupAction">The action that sets up the decorators for this service</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        /// <remarks>
+        /// If decorators will be applied, the type specified in <typeparamref name="TImplementation"/> needs to be different from the type specified in <typeparamref name="TService"/> since the implementation will be
+        /// registered under <typeparamref name="TImplementation"/> and the decorator proxy will be registered under <typeparamref name="TService"/>
+        /// </remarks>
+        public static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
+            where TService : class
+            where TImplementation : class, TService {
+
+            return services.Add(typeof(TService), typeof(TImplementation), implementationFactory, lifetime, setupAction);
+        }
+
+        internal static IServiceCollection Add(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction) {
+            var options = GetDecoratorOptions(serviceType, implementationType, setupAction);
 
             if (options.Policies.Any()) {
-                VerifyRegistration<TService, TImplementation>();
+                VerifyRegistration(serviceType, implementationType);
 
-                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
+                var proxyFactory = GetDecoratedProxyFactory(serviceType, implementationType, options);
 
-                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
-                services.Add(new ServiceDescriptor(typeof(TImplementation), typeof(TImplementation), lifetime));
+                services.Add(new ServiceDescriptor(serviceType, proxyFactory, lifetime));
+                services.Add(implementationType, implementationType, implementationFactory, lifetime);
             }
             else {
-                services.Add(new ServiceDescriptor(typeof(TService), typeof(TImplementation), lifetime));
+                services.Add(serviceType, implementationType, implementationFactory, lifetime);
             }
 
             return services;
         }
 
-        private static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, Func<IServiceProvider, TImplementation> implementationFactory, ServiceLifetime lifetime, Action<DecoratorOptions> setupAction)
-            where TService : class
-            where TImplementation : class, TService {
-
-            var options = GetDecoratorOptions<TService, TImplementation>(setupAction);
-
-            if (options.Policies.Any()) {
-                VerifyRegistration<TService, TImplementation>();
-
-                var proxyFactory = GetDecoratedProxyFactory<TService, TImplementation>(options);
-
-                services.Add(new ServiceDescriptor(typeof(TService), proxyFactory, lifetime));
-                services.Add(new ServiceDescriptor(typeof(TImplementation), implementationFactory, lifetime));
+        private static void Add(this IServiceCollection services, Type serviceType, Type implementationType, Func<IServiceProvider, object>? implementationFactory, ServiceLifetime lifetime) {
+            if (implementationFactory == null) {
+                services.Add(new ServiceDescriptor(serviceType, implementationType, lifetime));
             }
             else {
-                services.Add(new ServiceDescriptor(typeof(TService), implementationFactory, lifetime));
-            }
-
-            return services;
-        }
-
-        private static void VerifyRegistration<TService, TImplementation>()
-            where TService : class
-            where TImplementation : class, TService {
-
-            if (typeof(TService) == typeof(TImplementation)) {
-                throw new ServiceRegistrationException($"Implementation type '{typeof(TImplementation).FullName}' can not be equal to service type '{typeof(TService).FullName}'.");
+                services.Add(new ServiceDescriptor(serviceType, implementationFactory, lifetime));
             }
         }
 
-        private static DecoratorOptions GetDecoratorOptions<TService, TImplementation>(Action<DecoratorOptions> setupAction)
-            where TService : class
-            where TImplementation : class, TService {
+        private static void VerifyRegistration(Type serviceType, Type implementationType) {
+            if (serviceType == implementationType) {
+                throw new ServiceRegistrationException($"Implementation type '{serviceType.FullName}' can not be equal to service type '{implementationType.FullName}'.");
+            }
+        }
 
-            var options = new DecoratorOptions(typeof(TService), typeof(TImplementation));
+        private static DecoratorOptions GetDecoratorOptions(Type serviceType, Type implementationType, Action<DecoratorOptions> setupAction) {
+            var options = new DecoratorOptions(serviceType, implementationType);
             setupAction(options);
 
             return options;
         }
 
-        private static Func<IServiceProvider, TService> GetDecoratedProxyFactory<TService, TImplementation>(DecoratorOptions options)
-            where TService : class
-            where TImplementation : class, TService {
-
+        private static Func<IServiceProvider, object> GetDecoratedProxyFactory(Type serviceType, Type implementationType, DecoratorOptions options) {
             var generator = new Castle.DynamicProxy.ProxyGenerator();
-            var isInterface = typeof(TService).IsInterface;
+            var isInterface = serviceType.IsInterface;
             object?[]? constructorArguments = null;
 
             if (!isInterface) {
                 // We need to supply constructor arguments; the actual content does not matter since only overridable methods will be called
-                var constructor = typeof(TService).GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                var constructor = serviceType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
                     .FirstOrDefault(c => !c.IsPrivate);
 
                 if (constructor == null) {
-                    throw new ServiceRegistrationException($"Service type '{typeof(TService).FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
+                    throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
                 }
 
                 constructorArguments = Enumerable.Range(0, constructor.GetParameters().Length)
@@ -351,14 +369,14 @@ namespace VDT.Core.DependencyInjection.Decorators {
             }
 
             return serviceProvider => {
-                var target = serviceProvider.GetRequiredService<TImplementation>();
-                var decorators = options.Policies.Select(p => new DecoratorInterceptor(p.GetDecorator(serviceProvider), p.Predicate)).ToArray();
+                var target = serviceProvider.GetRequiredService(implementationType);
+                var decorators = options.Policies.Select(p => new DecoratorInterceptor((IDecorator)serviceProvider.GetRequiredService(p.DecoratorType), p.Predicate)).ToArray();
 
                 if (isInterface) {
-                    return generator.CreateInterfaceProxyWithTarget<TService>(target, decorators);
+                    return generator.CreateInterfaceProxyWithTarget(serviceType, target, decorators);
                 }
                 else {
-                    return (TService)generator.CreateClassProxyWithTarget(typeof(TService), target, constructorArguments, decorators);
+                    return generator.CreateClassProxyWithTarget(serviceType, target, constructorArguments, decorators);
                 }
             };
         }
