@@ -42,7 +42,21 @@ namespace VDT.Core.DependencyInjection {
             return options
                 .Assemblies
                 .SelectMany(a => options.ServiceTypeProviders.Select(p => new { Assembly = a, ServiceTypeProvider = p }))
-                .SelectMany(x => GetServices(x.Assembly, x.ServiceTypeProvider, options.DefaultServiceLifetime));
+                .SelectMany(x => GetServices(x.Assembly, x.ServiceTypeProvider, options.DefaultServiceLifetime))
+                .Union(options.Assemblies.SelectMany(assembly => options.ServiceRegistrationProviders.SelectMany(serviceRegistrationProvider => GetServices(assembly, serviceRegistrationProvider, options.DefaultServiceLifetime))));
+        }
+
+        private static IEnumerable<ServiceContext> GetServices(Assembly assembly, ServiceRegistrationProvider provider, ServiceLifetime defaultServiceLifetime) {
+            return assembly
+                .GetTypes()
+                .Where(t => !t.IsInterface && !t.IsAbstract && !t.IsGenericTypeDefinition)
+                .SelectMany(implementationType => provider(implementationType)
+                    .Select(serviceRegistration => new ServiceContext(
+                        serviceRegistration.ServiceType,
+                        implementationType,
+                        serviceLifetime: serviceRegistration.ServiceLifetime ?? defaultServiceLifetime
+                    ))
+                );
         }
 
         private static IEnumerable<ServiceContext> GetServices(Assembly assembly, ServiceTypeProviderOptions options, ServiceLifetime defaultServiceLifetime) {
