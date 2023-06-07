@@ -10,8 +10,16 @@ namespace VDT.Core.DependencyInjection {
         /// Create registration information for registering an implementation type
         /// </summary>
         /// <param name="serviceType">The type of the service to register the given implementation type as</param>
-        public ServiceRegistration(Type serviceType) {
+        public ServiceRegistration(Type serviceType) : this(serviceType, null) { }
+
+        /// <summary>
+        /// Create registration information for registering an implementation type
+        /// </summary>
+        /// <param name="serviceType">The type of the service to register the given implementation type as</param>
+        /// <param name="serviceLifetime">The <see cref="ServiceLifetime"/> for the service to register</param>
+        public ServiceRegistration(Type serviceType, ServiceLifetime? serviceLifetime) {
             ServiceType = serviceType;
+            ServiceLifetime = serviceLifetime;
         }
 
         /// <summary>

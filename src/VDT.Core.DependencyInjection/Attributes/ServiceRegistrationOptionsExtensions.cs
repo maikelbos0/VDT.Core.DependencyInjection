@@ -57,10 +57,14 @@ namespace VDT.Core.DependencyInjection.Attributes {
             options.AddServiceRegistrationProvider(
                 implementationType => implementationType.GetCustomAttributes(typeof(IServiceImplementationAttribute), false)
                     .Cast<IServiceImplementationAttribute>()
-                    .Select(attribute => new ServiceRegistration(attribute.ServiceType) { ServiceLifetime = attribute.ServiceLifetime })
+                    .Select(attribute => new ServiceRegistration(attribute.ServiceType, attribute.ServiceLifetime))
             );
 
             // Attributes on service interface types
+            options.AddServiceRegistrationProvider(
+                implementationType => implementationType.GetInterfaces()
+                    .SelectMany(serviceType => serviceType.GetCustomAttributes(typeof(IServiceAttribute), false).Cast<IServiceAttribute>().Select(attribute => new ServiceRegistration(serviceType, attribute.ServiceLifetime)))
+            );
 
             // Attributes on service class types
 

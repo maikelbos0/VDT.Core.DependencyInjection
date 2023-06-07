@@ -1,7 +1,10 @@
-﻿namespace VDT.Core.DependencyInjection {
+﻿using System;
+
+namespace VDT.Core.DependencyInjection {
     /// <summary>
     /// Options for a method that returns service types for a given implementation type
     /// </summary>
+    [Obsolete]
     public class ServiceTypeProviderOptions {
         /// <summary>
         /// Create options for a method that returns service types for a given implementation type
