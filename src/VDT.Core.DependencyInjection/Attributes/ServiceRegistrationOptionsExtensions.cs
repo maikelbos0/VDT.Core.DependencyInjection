@@ -46,5 +46,25 @@ namespace VDT.Core.DependencyInjection.Attributes {
             return options;
         }
 
+        /// <summary>
+        /// Add service registration providers that find and use <see cref="TransientServiceAttribute"/>, <see cref="ScopedServiceAttribute"/>, <see cref="SingletonServiceAttribute"/>,
+        /// <see cref="TransientServiceImplementationAttribute"/>, <see cref="ScopedServiceImplementationAttribute"/> or <see cref="SingletonServiceImplementationAttribute"/> to register services
+        /// </summary>
+        /// <param name="options">The options for registering services</param>
+        /// <returns>A reference to this instance after the operation has completed</returns>
+        public static ServiceRegistrationOptions AddAttributeServiceRegistrationProviders(this ServiceRegistrationOptions options) {
+            // Attributes on implementation types
+            options.AddServiceRegistrationProvider(
+                implementationType => implementationType.GetCustomAttributes(typeof(IServiceImplementationAttribute), false)
+                    .Cast<IServiceImplementationAttribute>()
+                    .Select(attribute => new ServiceRegistration(attribute.ServiceType) { ServiceLifetime = attribute.ServiceLifetime })
+            );
+
+            // Attributes on service interface types
+
+            // Attributes on service class types
+
+            return options;
+        }
     }
 }
