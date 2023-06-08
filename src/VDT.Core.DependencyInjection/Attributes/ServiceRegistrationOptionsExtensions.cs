@@ -13,7 +13,7 @@ namespace VDT.Core.DependencyInjection.Attributes {
         /// </summary>
         /// <param name="options">The options for registering services</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
-        [Obsolete]
+        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This method will be removed in a future version.")]
         public static ServiceRegistrationOptions AddAttributeServiceTypeProviders(this ServiceRegistrationOptions options) {
             // Attributes on implementation types
             options.AddServiceTypeProvider(

@@ -18,7 +18,6 @@ namespace VDT.Core.DependencyInjection.Tests {
             Assert.Equal(ServiceLifetime.Singleton, services.Single(s => s.ServiceType == typeof(INamedService)).Lifetime);
         }
 
-        // TODO replace ServiceTypeProviders with ServiceRegistrationProviders
         [Fact]
         public void AddServices_Uses_DefaultServiceLifetime_If_No_ServiceRegistration_ServiceLifetime_Provided() {
             var services = new ServiceCollection();
@@ -31,8 +30,7 @@ namespace VDT.Core.DependencyInjection.Tests {
 
             Assert.Equal(ServiceLifetime.Singleton, services.Single(s => s.ServiceType == typeof(INamedService)).Lifetime);
         }
-
-        // TODO delete
+        
         [Fact]
         public void AddServices_Uses_DefaultServiceLifetime_If_No_ServiceLifetimeProvider_Supplied() {
             var services = new ServiceCollection();
@@ -76,7 +74,6 @@ namespace VDT.Core.DependencyInjection.Tests {
             Assert.Equal(ServiceLifetime.Scoped, service.Lifetime);
         }
 
-        // TODO delete
         [Fact]
         public void AddServices_Adds_Services_From_All_ServiceTypeProviders() {
             var services = new ServiceCollection();

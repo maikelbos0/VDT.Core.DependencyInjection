@@ -16,7 +16,7 @@ namespace VDT.Core.DependencyInjection {
         /// <summary>
         /// Options for methods that return service types for a given implementation type; service types that appear in any method will be registered
         /// </summary>
-        [Obsolete]
+        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This property will be removed in a future version.")]
         public List<ServiceTypeProviderOptions> ServiceTypeProviders { get; set; } = new List<ServiceTypeProviderOptions>();
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace VDT.Core.DependencyInjection {
         /// <param name="serviceTypeProvider">Method that returns service types for a given implementation type</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>When using decorators, the service types must differ from the implementation type</remarks>
-        [Obsolete]
+        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This method will be removed in a future version.")]
         public ServiceRegistrationOptions AddServiceTypeProvider(ServiceTypeProvider serviceTypeProvider) {
             ServiceTypeProviders.Add(new ServiceTypeProviderOptions(serviceTypeProvider));
 
@@ -124,7 +124,7 @@ namespace VDT.Core.DependencyInjection {
         /// <param name="serviceLifetimeProvider">Method that returns a service lifetime for a given service and implementation type to be registered</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         /// <remarks>When using decorators, the service types must differ from the implementation type</remarks>
-        [Obsolete]
+        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This method will be removed in a future version.")]
         public ServiceRegistrationOptions AddServiceTypeProvider(ServiceTypeProvider serviceTypeProvider, ServiceLifetimeProvider serviceLifetimeProvider) {
             ServiceTypeProviders.Add(new ServiceTypeProviderOptions(serviceTypeProvider) {
                 ServiceLifetimeProvider = serviceLifetimeProvider
