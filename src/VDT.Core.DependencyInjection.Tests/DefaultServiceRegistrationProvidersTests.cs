@@ -58,8 +58,8 @@ namespace VDT.Core.DependencyInjection.Tests {
         }
 
         [Fact]
-        public void CreateGenericInterfaceTypeProvider_Returns_ServiceTypeProvider_That_Returns_Correct_Constructed_Generic_Service_Types() {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceTypeProvider(typeof(ICommandHandler<>), null);
+        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_Constructed_Generic_Service_Types() {
+            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>), null);
 
             Assert.Equal(typeof(ICommandHandler<string>), Assert.Single(provider(typeof(StringCommandHandler))).ServiceType);
         }
@@ -67,27 +67,27 @@ namespace VDT.Core.DependencyInjection.Tests {
         [Theory]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(null)]
-        public void CreateGenericInterfaceTypeProvider_Returns_ServiceTypeProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceTypeProvider(typeof(ICommandHandler<>), serviceLifetime);
+        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>), serviceLifetime);
 
             Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(StringCommandHandler))).ServiceLifetime);
         }
 
         [Fact]
-        public void CreateGenericInterfaceTypeProvider_Returns_ServiceTypeProvider_That_Returns_No_Services_For_Not_Generic_Interface() {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceTypeProvider(typeof(ICommandHandler<>), null);
+        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Not_Generic_Interface() {
+            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>), null);
 
             Assert.Empty(provider(typeof(NamedService)));
         }
 
         [Fact]
-        public void CreateGenericInterfaceTypeProvider_Throws_Exception_When_Not_Passing_Unbound_Generic_Type() {
-            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceTypeProvider(typeof(IGenericInterface), null));
+        public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Unbound_Generic_Type() {
+            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(IGenericInterface), null));
         }
 
         [Fact]
-        public void CreateGenericInterfaceTypeProvider_Throws_Exception_When_Not_Passing_Interface_Types() {
-            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceTypeProvider(typeof(CommandHandler<>), null));
+        public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Interface_Types() {
+            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(CommandHandler<>), null));
         }
     }
 }

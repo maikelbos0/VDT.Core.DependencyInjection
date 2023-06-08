@@ -36,18 +36,18 @@ namespace VDT.Core.DependencyInjection {
                 .Select(serviceType => new ServiceRegistration(serviceType, serviceLifetime));
 
         /// <summary>
-        /// Create a service type provider that finds all implementations of a generic interface
+        /// Create a service registration provider that finds all implementations of a generic interface
         /// </summary>
         /// <param name="genericServiceType">The generic interface type definition to match implementation types to</param>
         /// <param name="serviceLifetime">The <see cref="ServiceLifetime"/> for the service types to register</param>
         /// <returns>A <see cref="ServiceTypeProvider"/> that finds any matching constructed service types for an implementation type</returns>
-        public static ServiceRegistrationProvider CreateGenericInterfaceTypeProvider(Type genericServiceType, ServiceLifetime? serviceLifetime) {
+        public static ServiceRegistrationProvider CreateGenericInterfaceRegistrationProvider(Type genericServiceType, ServiceLifetime? serviceLifetime) {
             if (!genericServiceType.IsGenericTypeDefinition) {
-                throw new ServiceRegistrationException($"{nameof(CreateGenericInterfaceTypeProvider)} expects {nameof(genericServiceType)} to be a generic interface type definition; type '{genericServiceType.FullName}' is not a generic type definition");
+                throw new ServiceRegistrationException($"{nameof(CreateGenericInterfaceRegistrationProvider)} expects {nameof(genericServiceType)} to be a generic interface type definition; type '{genericServiceType.FullName}' is not a generic type definition");
             }
 
             if (!genericServiceType.IsInterface) {
-                throw new ServiceRegistrationException($"{nameof(CreateGenericInterfaceTypeProvider)} expects {nameof(genericServiceType)} to be a generic interface type definition; type '{genericServiceType.FullName}' is not an interface type");
+                throw new ServiceRegistrationException($"{nameof(CreateGenericInterfaceRegistrationProvider)} expects {nameof(genericServiceType)} to be a generic interface type definition; type '{genericServiceType.FullName}' is not an interface type");
             }
 
             return implementationType => implementationType.GetInterfaces()
