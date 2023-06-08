@@ -5,56 +5,56 @@ using Xunit;
 namespace VDT.Core.DependencyInjection.Tests {
     public class DefaultServiceRegistrationProvidersTests {
         [Fact]
-        public void SingleInterface_Returns_Single_Interface_If_Found() {
-            var serviceTypes = DefaultServiceRegistrationProviders.SingleInterface(typeof(DefaultSingleInterfaceService), null);
+        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Single_Interface_If_Found() {
+            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(null);
 
-            Assert.Equal(typeof(ISingleInterfaceService), Assert.Single(serviceTypes).ServiceType);
+            Assert.Equal(typeof(ISingleInterfaceService), Assert.Single(provider(typeof(DefaultSingleInterfaceService))).ServiceType);
         }
 
         [Theory]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(null)]
-        public void SingleInterface_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var serviceTypes = DefaultServiceRegistrationProviders.SingleInterface(typeof(DefaultSingleInterfaceService), serviceLifetime);
+        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(serviceLifetime);
 
-            Assert.Equal(serviceLifetime, Assert.Single(serviceTypes).ServiceLifetime);
+            Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(DefaultSingleInterfaceService))).ServiceLifetime);
         }
 
         [Fact]
-        public void SingleInterface_Returns_No_Services_For_No_Interfaces() {
-            var serviceTypes = DefaultServiceRegistrationProviders.SingleInterface(typeof(ImplementationOnlyService), null);
+        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Interfaces() {
+            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(null);
 
-            Assert.Empty(serviceTypes);
+            Assert.Empty(provider(typeof(ImplementationOnlyService)));
         }
 
         [Fact]
-        public void SingleInterface_Returns_No_Services_For_Multiple_Interfaces() {
-            var serviceTypes = DefaultServiceRegistrationProviders.SingleInterface(typeof(NamedService), null);
+        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Multiple_Interfaces() {
+            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(null);
 
-            Assert.Empty(serviceTypes);
+            Assert.Empty(provider(typeof(NamedService)));
         }
 
         [Fact]
-        public void InterfaceByName_Returns_Interfaces_By_Name() {
-            var serviceTypes = DefaultServiceRegistrationProviders.InterfaceByName(typeof(NamedService), null);
+        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Interfaces_By_Name() {
+            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(null);
 
-            Assert.Equal(typeof(INamedService), Assert.Single(serviceTypes).ServiceType);
+            Assert.Equal(typeof(INamedService), Assert.Single(provider(typeof(NamedService))).ServiceType);
         }
 
         [Theory]
         [InlineData(ServiceLifetime.Scoped)]
         [InlineData(null)]
-        public void InterfaceByName_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var serviceTypes = DefaultServiceRegistrationProviders.InterfaceByName(typeof(NamedService), serviceLifetime);
+        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(serviceLifetime);
 
-            Assert.Equal(serviceLifetime, Assert.Single(serviceTypes).ServiceLifetime);
+            Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(NamedService))).ServiceLifetime);
         }
 
         [Fact]
-        public void InterfaceByName_Returns_No_Services_For_No_Correctly_Named_Interfaces() {
-            var serviceTypes = DefaultServiceRegistrationProviders.InterfaceByName(typeof(DefaultSingleInterfaceService), null);
+        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Correctly_Named_Interfaces() {
+            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(null);
 
-            Assert.Empty(serviceTypes);
+            Assert.Empty(provider(typeof(DefaultSingleInterfaceService)));
         }
 
         [Fact]
