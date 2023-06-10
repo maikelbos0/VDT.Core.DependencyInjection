@@ -17,13 +17,14 @@ the provided setup action. The `ServiceRegistrationOptions` class provides metho
 - `AddAssemblies` adds multiple assemblies to scan for services
   - Overloads are provided to add multiple assemblies as a parameter array or enumerable
   - Overloads are provided to search for assemblies recursively by predicate or assembly name prefix
-- `AddServiceTypeProvider` adds a method that returns service types for a given implementation type found in the assemblies
-  - These methods must match the delegate method `ServiceTypeProvider`
-  - It is possible to supply a `ServiceLifetimeProvider` that returns the appropriate `ServiceLifetime` for a given service type and implementation type
-- `UseDefaultServiceLifetime` sets the default `ServiceLifetime` to use if no `ServiceLifetimeProvider` was provided or it did not return a `ServiceLifetime`
+- `AddServiceRegistrationProvider` adds a method that returns service types for a given implementation type found in the assemblies
+  - These methods must match the delegate method `ServiceRegistrationProvider`
+  - These methods return a collection of `ServiceRegistration` which contain the service type and optionally the desired `ServiceLifetime`
+- `UseDefaultServiceLifetime` sets the default `ServiceLifetime` to use if the found `ServiceRegistration` does not include a `ServiceLifetime`
 - `UseServiceRegistrar` sets the method to use for registering services
   - This method must match the delegate method `ServiceRegistrar`
   - By default a new `ServiceDescriptor` will be created with the found service type, implementation type and lifetime
+- Please note that the `AddServiceTypeProvider` methods have been deprecated since they are being replaced by `AddServiceRegistrationProvider`
 
 ### Example
 
@@ -38,15 +39,18 @@ public class Startup {
             // Add all project assemblies based on prefix
             .AddAssemblies(entryAssembly: typeof(Startup).Assembly, assemblyPrefix: "MyCompany.MySolution")
             
-            // Add a service type provider with a lifetime provider
-            .AddServiceTypeProvider(
-                serviceTypeProvider: implementationType => implementationType.GetInterfaces().Where(serviceType => serviceType.Assembly == implementationType.Assembly),
-                serviceLifetimeProvider: (serviceType, implementationType) => ServiceLifetime.Scoped
+            // Add a service registration provider with a lifetime
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: implementationType => implementationType.GetInterfaces()
+                    .Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+                    .Select(new ServiceRegistration(serviceType, ServiceLifetime.Scoped))
             )
             
-            // Add a service type provider without a lifetime provider
-            .AddServiceTypeProvider(
-                serviceTypeProvider: implementationType => implementationType.GetInterfaces().Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+            // Add a service registration provider without a lifetime provider
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: implementationType => implementationType.GetInterfaces()
+                    .Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+                    .Select(new ServiceRegistration(serviceType))
             )
 
             // Optional: use a different ServiceLifetime than Scoped by default
