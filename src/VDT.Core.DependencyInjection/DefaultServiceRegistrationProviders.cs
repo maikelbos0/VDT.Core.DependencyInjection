@@ -10,6 +10,12 @@ namespace VDT.Core.DependencyInjection {
         /// <summary>
         /// Create a service registration provider that returns the interface for implementation types if only a single interface is found; otherwise it returns no service types
         /// </summary>
+        /// <returns>A <see cref="ServiceTypeProvider"/> that finds the service interface for an implementation type if only a single interface is found</returns>
+        public static ServiceRegistrationProvider CreateSingleInterfaceProvider() => CreateSingleInterfaceProvider(null);
+
+        /// <summary>
+        /// Create a service registration provider that returns the interface for implementation types if only a single interface is found; otherwise it returns no service types
+        /// </summary>
         /// <param name="serviceLifetime">The <see cref="ServiceLifetime"/> for the service types to register</param>
         /// <returns>A <see cref="ServiceTypeProvider"/> that finds the service interface for an implementation type if only a single interface is found</returns>
         public static ServiceRegistrationProvider CreateSingleInterfaceProvider(ServiceLifetime? serviceLifetime) {
@@ -27,13 +33,26 @@ namespace VDT.Core.DependencyInjection {
         /// <summary>
         /// Create a service registration provider that returns all interfaces that match the implementation type name with an "I" prefix; e.g. MyService and IMyService
         /// </summary>
+        /// <returns>A <see cref="ServiceTypeProvider"/> that finds any service interfaces that match the name of an implementation type</returns>
+        public static ServiceRegistrationProvider CreateInterfaceByNameProvider() => CreateInterfaceByNameProvider(null);
+
+        /// <summary>
+        /// Create a service registration provider that returns all interfaces that match the implementation type name with an "I" prefix; e.g. MyService and IMyService
+        /// </summary>
         /// <param name="serviceLifetime">The <see cref="ServiceLifetime"/> for the service types to register</param>
         /// <returns>A <see cref="ServiceTypeProvider"/> that finds any service interfaces that match the name of an implementation type</returns>
-        public static ServiceRegistrationProvider CreateInterfaceByNameProvider(ServiceLifetime? serviceLifetime) { 
+        public static ServiceRegistrationProvider CreateInterfaceByNameProvider(ServiceLifetime? serviceLifetime) {
             return implementationType => implementationType.GetInterfaces()
                 .Where(serviceType => serviceType.Name == $"I{implementationType.Name}")
                 .Select(serviceType => new ServiceRegistration(serviceType, serviceLifetime));
         }
+
+        /// <summary>
+        /// Create a service registration provider that finds all implementations of a generic interface
+        /// </summary>
+        /// <param name="genericServiceType">The generic interface type definition to match implementation types to</param>
+        /// <returns>A <see cref="ServiceTypeProvider"/> that finds any matching constructed service types for an implementation type</returns>
+        public static ServiceRegistrationProvider CreateGenericInterfaceRegistrationProvider(Type genericServiceType) => CreateGenericInterfaceRegistrationProvider(genericServiceType, null);
 
         /// <summary>
         /// Create a service registration provider that finds all implementations of a generic interface
