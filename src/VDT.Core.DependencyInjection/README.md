@@ -193,7 +193,7 @@ your own implementations of the `Decorators.IDecorator` interface.
 
 If you wish to use decorators when using options-based service registration as described above, it is possible to use the 
 `Decorators.ServiceRegistrationOptionsExtensions.UseDecoratorServiceRegistrar` extension method which can apply decorator options to all classes that are
-registered using the provided `ServiceTypeProvider` implementations.
+registered using the provided `ServiceRegistrationProvider` methods.
 
 The `Decorators.IDecorator` interface has three methods:
 
@@ -251,23 +251,23 @@ public class Startup {
         // Register services with a provided decorator
         services.AddServices(options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider()
             )
-            .UseDecoratorServiceRegistrar(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo")
+            .UseDecoratorServiceRegistrar(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo"))
         );
         
         // Register services using attributes
         services.AddServices(options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider()
             )
             .UseDecoratorServiceRegistrar(setupAction: options => options.AddAttributeDecorators())
         );
 
         // Register a single service with a provided decorator
-        services.AddScoped<IExample, Example>(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo");
+        services.AddScoped<IExample, Example>(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo"));
 
         // Register a single service using attributes
         services.AddScoped<IExample, Example>(setupAction: options => options.AddAttributeDecorators());
