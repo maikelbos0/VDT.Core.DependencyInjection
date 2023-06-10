@@ -73,13 +73,17 @@ public class Startup {
 
 ## Convention-based service registration
 
-The class `DefaultServiceTypeProviders` contains three ways to register services based on common conventions:
+The class `DefaultServiceRegistrationProviders` contains three ways to register services based on common conventions. Each method creates a 
+`ServiceRegistrationProvider` that can be added to the `ServiceRegistrationOptions` to find services to register, and each method takes as an optional 
+parameter the `ServiceLifetime` of the services found by this provider.
 
-- `SingleInterface` returns the single interface if an implementation type implements exactly one interface
-- `InterfaceByName` returns interface types found on on implementation types that follow the .NET naming guideline of naming class-interface pairs:
+- `CreateSingleInterfaceProvider` returns the single interface if an implementation type implements exactly one interface
+- `CreateInterfaceByNameProvider` returns interface types found on on implementation types that follow the .NET naming guideline of naming class-interface pairs:
   - Service interface name `IMyService`
   - Implementation class name `MyService`
-- `CreateGenericInterfaceTypeProvider` generates a `ServiceTypeProvider` that finds generic types based on a generic type definition
+- `CreateGenericInterfaceRegistrationProvider` finds generic types based on a generic type definition:
+  - Service interface name `IRequestHandler<TRequest>`
+  - Implementation class `ExampleRequestHandler : IRequestHandler<ExampleRequest>`
   - This is useful if you implement generic interface types such request handlers, command handlers or query handlers
 
 ### Example
@@ -92,15 +96,15 @@ public class Startup {
             .AddAssembly(assembly: typeof(Startup).Assembly)
             .AddAssembly(assembly: typeof(MyService).Assembly)
             
-            // Add default service type providers
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.SingleInterface
+            // Add default service registration providers
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider()
             )
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(ServiceLifetime.Scoped)
             )
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.CreateGenericInterfaceTypeProvider(typeof(IRequestHandler))
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(IRequestHandler<>))
             )
         );
 
