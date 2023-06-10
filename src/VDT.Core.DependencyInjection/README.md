@@ -119,9 +119,9 @@ public class Startup {
 
 ## Attribute-based service registration
 
-The extension method `Attributes.ServiceRegistrationOptionsExtensions.AddAttributeServiceTypeProviders` allows you to move registration for your services from
-the `Startup` class to the services themselves without using convention-based registration. Simply mark your services or service implementations with the
-different types of service attributes to indicate that a service should be registered and use the options extension to add the correct providers.
+The extension method `Attributes.ServiceRegistrationOptionsExtensions.AddAttributeServiceRegistrationProviders` allows you to move registration for your 
+services from the `Startup` class to the services themselves without using convention-based registration. Simply mark your services or service implementations
+with the different types of service attributes to indicate that a service should be registered and use the options extension to add the correct providers.
 
 There are six attributes available:
 - `Attributes.TransientServiceAttribute` marks a service to be registered as a transient service with the supplied implementation type
@@ -155,7 +155,7 @@ public interface IBar {
 }
 
 // Mark the implementation
-[ScopedServiceImplementation(serviceType: typeof(Bar))]
+[ScopedServiceImplementation(serviceType: typeof(IBar))]
 public class Bar {
     public void Foo() {
         // ...
@@ -167,7 +167,7 @@ public class Startup {
         // Register using options
         services.AddServices(setupAction: options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddAttributeServiceTypeProviders()
+            .AddAttributeServiceRegistrationProviders()
         );
 
         // Register using convenience method
