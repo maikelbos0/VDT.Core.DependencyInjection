@@ -11,7 +11,7 @@ namespace VDT.Core.DependencyInjection.Tests {
 
             services.AddServices(options => {
                 options.Assemblies.Add(typeof(NamedService).Assembly);
-                options.ServiceRegistrationProviders.Add(t => t.GetInterfaces().Where(i => i != typeof(IGenericInterface)).Select(i => new ServiceRegistration(i) { ServiceLifetime = ServiceLifetime.Singleton }));
+                options.ServiceRegistrationProviders.Add(t => t.GetInterfaces().Where(i => i != typeof(IGenericInterface)).Select(i => new ServiceRegistration(i, ServiceLifetime.Singleton)));
                 options.DefaultServiceLifetime = ServiceLifetime.Scoped;
             });
 
