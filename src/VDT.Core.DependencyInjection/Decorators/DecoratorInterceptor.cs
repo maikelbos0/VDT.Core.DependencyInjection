@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace VDT.Core.DependencyInjection.Decorators {
     internal sealed class DecoratorInterceptor : IInterceptor {
         private static readonly MethodInfo decorateTaskWithResultMethod = typeof(DecoratorInterceptor).GetMethod(nameof(DecorateTaskWithResult), BindingFlags.Static | BindingFlags.NonPublic)
-             ?? throw new InvalidOperationException($"Method '{typeof(DecoratorInterceptor).FullName} . {nameof(DecorateTaskWithResult)}' was not found.");
+             ?? throw new InvalidOperationException($"Method '{typeof(DecoratorInterceptor).FullName}.{nameof(DecorateTaskWithResult)}' was not found.");
 
-        private static readonly Dictionary<MethodInfo, Action<IDecorator, IInvocation, MethodExecutionContext>> decoratorActions = new Dictionary<MethodInfo, Action<IDecorator, IInvocation, MethodExecutionContext>>();
+        private static readonly Dictionary<MethodInfo, Action<IDecorator, IInvocation, MethodExecutionContext>> decoratorActions = new();
 
         private static Action<IDecorator, IInvocation, MethodExecutionContext> GetDecoratorAction(MethodInfo method) {
             if (!decoratorActions.TryGetValue(method, out var action)) {

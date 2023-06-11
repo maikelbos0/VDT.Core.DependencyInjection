@@ -218,11 +218,8 @@ namespace VDT.Core.DependencyInjection.Decorators {
             if (!isInterface) {
                 // We need to supply constructor arguments; the actual content does not matter since only overridable methods will be called
                 var constructor = serviceType.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
-                    .FirstOrDefault(c => !c.IsPrivate);
-
-                if (constructor == null) {
-                    throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
-                }
+                    .FirstOrDefault(c => !c.IsPrivate)
+                    ?? throw new ServiceRegistrationException($"Service type '{serviceType.FullName}' has no accessible constructor; class service types require at least one public or protected constructor.");
 
                 constructorArguments = Enumerable.Range(0, constructor.GetParameters().Length)
                     .Select(i => (object?)null)
