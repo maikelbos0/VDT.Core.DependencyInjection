@@ -10,7 +10,7 @@ namespace VDT.Core.DependencyInjection {
     /// </summary>
     public static class ServiceCollectionExtensions {
         /// <summary>
-        /// Provides a mechanism to register all services found by the provided service type providers in the assemblies provided in the options
+        /// Provides a mechanism to register all services found by the provided service registration providers in the assemblies provided in the options
         /// </summary>
         /// <param name="services">The <see cref="IServiceCollection"/> to add the services to</param>
         /// <param name="setupAction">The action that sets up the options for finding and registering services to this collection</param>

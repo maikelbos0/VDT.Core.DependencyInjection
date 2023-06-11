@@ -46,7 +46,7 @@ public class Startup {
                     .Select(new ServiceRegistration(serviceType, ServiceLifetime.Scoped))
             )
             
-            // Add a service registration provider without a lifetime provider
+            // Add a service registration provider without a lifetime
             .AddServiceRegistrationProvider(
                 serviceRegistrationProvider: implementationType => implementationType.GetInterfaces()
                     .Where(serviceType => serviceType.Assembly == implementationType.Assembly)
@@ -74,8 +74,8 @@ public class Startup {
 ## Convention-based service registration
 
 The class `DefaultServiceRegistrationProviders` contains three ways to register services based on common conventions. Each method creates a 
-`ServiceRegistrationProvider` that can be added to the `ServiceRegistrationOptions` to find services to register, and each method takes as an optional 
-parameter the `ServiceLifetime` of the services found by this provider.
+`ServiceRegistrationProvider` that can be added to the `ServiceRegistrationOptions` to find services to register, and each method takes the `ServiceLifetime` 
+of the services found by this provider as an optional parameter.
 
 - `CreateSingleInterfaceProvider` returns the single interface if an implementation type implements exactly one interface
 - `CreateInterfaceByNameProvider` returns interface types found on on implementation types that follow the .NET naming guideline of naming class-interface pairs:
@@ -132,7 +132,7 @@ There are six attributes available:
 - `Attributes.SingletonServiceImplementationAttribute` marks the implementation to be registered as a singleton service under the supplied service type
 
 The extension methods `Attributes.ServiceCollectionExtensions.AddAttributeServices` are convenience methods that you can use if you don't need any other
-service type providers or additional setup of service registration.
+service registration providers or additional setup of service registration.
 
 ### Example
 

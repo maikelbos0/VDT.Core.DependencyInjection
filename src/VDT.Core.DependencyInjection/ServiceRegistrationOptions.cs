@@ -14,13 +14,13 @@ namespace VDT.Core.DependencyInjection {
         public List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
         /// <summary>
-        /// Options for methods that return service types for a given implementation type; service types that appear in any method will be registered
+        /// Options for methods that return service types for a given implementation type; service types that are returned by any method will be registered
         /// </summary>
         [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This property will be removed in a future version.")]
         public List<ServiceTypeProviderOptions> ServiceTypeProviders { get; set; } = new List<ServiceTypeProviderOptions>();
 
         /// <summary>
-        /// Methods that return service types for a given implementation type; service types that appear from calling any method will be registered
+        /// Methods that return service types for a given implementation type; service types that are returned by any method will be registered
         /// </summary>
         public List<ServiceRegistrationProvider> ServiceRegistrationProviders { get; set; } = new List<ServiceRegistrationProvider>();
 

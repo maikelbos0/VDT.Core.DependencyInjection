@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace VDT.Core.DependencyInjection.Attributes {
     /// <summary>
-    /// Extension methods for adding service type providers for services marked with attributes to services to be registered using <see cref="ServiceRegistrationOptions"/>
+    /// Extension methods for adding service registration providers for services marked with attributes to services to be registered using <see cref="ServiceRegistrationOptions"/>
     /// </summary>
     public static class ServiceRegistrationOptionsExtensions {
         /// <summary>
