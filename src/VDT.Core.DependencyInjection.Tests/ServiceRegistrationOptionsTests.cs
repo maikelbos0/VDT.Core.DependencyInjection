@@ -57,6 +57,15 @@ namespace VDT.Core.DependencyInjection.Tests {
         }
 
         [Fact]
+        public void AddServiceRegistrationProvider_Adds_ServiceRegistrationProvider() {
+            ServiceRegistrationProvider serviceRegistrationProvider = implementationType => Enumerable.Empty<ServiceRegistration>();
+            var options = new ServiceRegistrationOptions();
+
+            Assert.Equal(options, options.AddServiceRegistrationProvider(serviceRegistrationProvider));
+            Assert.Equal(serviceRegistrationProvider, Assert.Single(options.ServiceRegistrationProviders));
+        }
+
+        [Fact]
         public void AddServiceTypeProvider_Adds_ServiceTypeProvider() {
             ServiceTypeProvider serviceTypeProvider = implementationType => Enumerable.Empty<Type>();
             var options = new ServiceRegistrationOptions();

@@ -1,7 +1,10 @@
-﻿namespace VDT.Core.DependencyInjection {
+﻿using System;
+
+namespace VDT.Core.DependencyInjection {
     /// <summary>
     /// Options for a method that returns service types for a given implementation type
     /// </summary>
+    [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This type will be removed in a future version.")]
     public class ServiceTypeProviderOptions {
         /// <summary>
         /// Create options for a method that returns service types for a given implementation type

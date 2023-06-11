@@ -17,13 +17,14 @@ the provided setup action. The `ServiceRegistrationOptions` class provides metho
 - `AddAssemblies` adds multiple assemblies to scan for services
   - Overloads are provided to add multiple assemblies as a parameter array or enumerable
   - Overloads are provided to search for assemblies recursively by predicate or assembly name prefix
-- `AddServiceTypeProvider` adds a method that returns service types for a given implementation type found in the assemblies
-  - These methods must match the delegate method `ServiceTypeProvider`
-  - It is possible to supply a `ServiceLifetimeProvider` that returns the appropriate `ServiceLifetime` for a given service type and implementation type
-- `UseDefaultServiceLifetime` sets the default `ServiceLifetime` to use if no `ServiceLifetimeProvider` was provided or it did not return a `ServiceLifetime`
+- `AddServiceRegistrationProvider` adds a method that returns service types for a given implementation type found in the assemblies
+  - These methods must match the delegate method `ServiceRegistrationProvider`
+  - These methods return a collection of `ServiceRegistration` which contain the service type and optionally the desired `ServiceLifetime`
+- `UseDefaultServiceLifetime` sets the default `ServiceLifetime` to use if the found `ServiceRegistration` does not include a `ServiceLifetime`
 - `UseServiceRegistrar` sets the method to use for registering services
   - This method must match the delegate method `ServiceRegistrar`
   - By default a new `ServiceDescriptor` will be created with the found service type, implementation type and lifetime
+- Please note that the `AddServiceTypeProvider` methods have been deprecated since they are being replaced by `AddServiceRegistrationProvider`
 
 ### Example
 
@@ -38,15 +39,18 @@ public class Startup {
             // Add all project assemblies based on prefix
             .AddAssemblies(entryAssembly: typeof(Startup).Assembly, assemblyPrefix: "MyCompany.MySolution")
             
-            // Add a service type provider with a lifetime provider
-            .AddServiceTypeProvider(
-                serviceTypeProvider: implementationType => implementationType.GetInterfaces().Where(serviceType => serviceType.Assembly == implementationType.Assembly),
-                serviceLifetimeProvider: (serviceType, implementationType) => ServiceLifetime.Scoped
+            // Add a service registration provider with a lifetime
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: implementationType => implementationType.GetInterfaces()
+                    .Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+                    .Select(new ServiceRegistration(serviceType, ServiceLifetime.Scoped))
             )
             
-            // Add a service type provider without a lifetime provider
-            .AddServiceTypeProvider(
-                serviceTypeProvider: implementationType => implementationType.GetInterfaces().Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+            // Add a service registration provider without a lifetime
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: implementationType => implementationType.GetInterfaces()
+                    .Where(serviceType => serviceType.Assembly == implementationType.Assembly)
+                    .Select(new ServiceRegistration(serviceType))
             )
 
             // Optional: use a different ServiceLifetime than Scoped by default
@@ -69,13 +73,17 @@ public class Startup {
 
 ## Convention-based service registration
 
-The class `DefaultServiceTypeProviders` contains three ways to register services based on common conventions:
+The class `DefaultServiceRegistrationProviders` contains three ways to register services based on common conventions. Each method creates a 
+`ServiceRegistrationProvider` that can be added to the `ServiceRegistrationOptions` to find services to register, and each method takes the `ServiceLifetime` 
+of the services found by this provider as an optional parameter.
 
-- `SingleInterface` returns the single interface if an implementation type implements exactly one interface
-- `InterfaceByName` returns interface types found on on implementation types that follow the .NET naming guideline of naming class-interface pairs:
+- `CreateSingleInterfaceProvider` returns the single interface if an implementation type implements exactly one interface
+- `CreateInterfaceByNameProvider` returns interface types found on on implementation types that follow the .NET naming guideline of naming class-interface pairs:
   - Service interface name `IMyService`
   - Implementation class name `MyService`
-- `CreateGenericInterfaceTypeProvider` generates a `ServiceTypeProvider` that finds generic types based on a generic type definition
+- `CreateGenericInterfaceRegistrationProvider` finds generic types based on a generic type definition:
+  - Service interface name `IRequestHandler<TRequest>`
+  - Implementation class `ExampleRequestHandler : IRequestHandler<ExampleRequest>`
   - This is useful if you implement generic interface types such request handlers, command handlers or query handlers
 
 ### Example
@@ -88,15 +96,15 @@ public class Startup {
             .AddAssembly(assembly: typeof(Startup).Assembly)
             .AddAssembly(assembly: typeof(MyService).Assembly)
             
-            // Add default service type providers
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.SingleInterface
+            // Add default service registration providers
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider()
             )
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(ServiceLifetime.Scoped)
             )
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.CreateGenericInterfaceTypeProvider(typeof(IRequestHandler))
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(IRequestHandler<>))
             )
         );
 
@@ -111,9 +119,9 @@ public class Startup {
 
 ## Attribute-based service registration
 
-The extension method `Attributes.ServiceRegistrationOptionsExtensions.AddAttributeServiceTypeProviders` allows you to move registration for your services from
-the `Startup` class to the services themselves without using convention-based registration. Simply mark your services or service implementations with the
-different types of service attributes to indicate that a service should be registered and use the options extension to add the correct providers.
+The extension method `Attributes.ServiceRegistrationOptionsExtensions.AddAttributeServiceRegistrationProviders` allows you to move registration for your 
+services from the `Startup` class to the services themselves without using convention-based registration. Simply mark your services or service implementations
+with the different types of service attributes to indicate that a service should be registered and use the options extension to add the correct providers.
 
 There are six attributes available:
 - `Attributes.TransientServiceAttribute` marks a service to be registered as a transient service with the supplied implementation type
@@ -124,7 +132,7 @@ There are six attributes available:
 - `Attributes.SingletonServiceImplementationAttribute` marks the implementation to be registered as a singleton service under the supplied service type
 
 The extension methods `Attributes.ServiceCollectionExtensions.AddAttributeServices` are convenience methods that you can use if you don't need any other
-service type providers or additional setup of service registration.
+service registration providers or additional setup of service registration.
 
 ### Example
 
@@ -147,7 +155,7 @@ public interface IBar {
 }
 
 // Mark the implementation
-[ScopedServiceImplementation(serviceType: typeof(Bar))]
+[ScopedServiceImplementation(serviceType: typeof(IBar))]
 public class Bar {
     public void Foo() {
         // ...
@@ -159,7 +167,7 @@ public class Startup {
         // Register using options
         services.AddServices(setupAction: options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddAttributeServiceTypeProviders()
+            .AddAttributeServiceRegistrationProviders()
         );
 
         // Register using convenience method
@@ -185,7 +193,7 @@ your own implementations of the `Decorators.IDecorator` interface.
 
 If you wish to use decorators when using options-based service registration as described above, it is possible to use the 
 `Decorators.ServiceRegistrationOptionsExtensions.UseDecoratorServiceRegistrar` extension method which can apply decorator options to all classes that are
-registered using the provided `ServiceTypeProvider` implementations.
+registered using the provided `ServiceRegistrationProvider` methods.
 
 The `Decorators.IDecorator` interface has three methods:
 
@@ -243,23 +251,23 @@ public class Startup {
         // Register services with a provided decorator
         services.AddServices(options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider()
             )
-            .UseDecoratorServiceRegistrar(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo")
+            .UseDecoratorServiceRegistrar(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo"))
         );
         
         // Register services using attributes
         services.AddServices(options => options
             .AddAssembly(assembly: typeof(Startup).Assembly)
-            .AddServiceTypeProvider(
-                serviceTypeProvider: DefaultServiceTypeProviders.InterfaceByName
+            .AddServiceRegistrationProvider(
+                serviceRegistrationProvider: DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider()
             )
             .UseDecoratorServiceRegistrar(setupAction: options => options.AddAttributeDecorators())
         );
 
         // Register a single service with a provided decorator
-        services.AddScoped<IExample, Example>(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo");
+        services.AddScoped<IExample, Example>(setupAction: options => options.AddDecorator<LogDecorator>(predicate: method => method.Name == "Foo"));
 
         // Register a single service using attributes
         services.AddScoped<IExample, Example>(setupAction: options => options.AddAttributeDecorators());
