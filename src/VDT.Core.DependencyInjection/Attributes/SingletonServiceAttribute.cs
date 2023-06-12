@@ -1,10 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Reflection;
 
 namespace VDT.Core.DependencyInjection.Attributes {
     /// <summary>
-    /// Marks a service to be registered as a singleton service when calling <see cref="DependencyInjection.ServiceCollectionExtensions.AddServices(IServiceCollection, Action{ServiceRegistrationOptions})"/>
+    /// Marks a service to be registered as singleton with the given implementation type when calling <see cref="DependencyInjection.ServiceCollectionExtensions.AddServices(IServiceCollection, Action{ServiceRegistrationOptions})"/>
     /// with <see cref="ServiceRegistrationOptionsExtensions.AddAttributeServiceRegistrationProviders(ServiceRegistrationOptions)"/> called on the <see cref="ServiceRegistrationOptions"/> builder action
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
@@ -20,7 +19,7 @@ namespace VDT.Core.DependencyInjection.Attributes {
         public ServiceLifetime ServiceLifetime => ServiceLifetime.Singleton;
 
         /// <summary>
-        /// Marks a service to be registered as a singleton service when calling <see cref="DependencyInjection.ServiceCollectionExtensions.AddServices(IServiceCollection, Action{ServiceRegistrationOptions})"/>
+        /// Marks a service to be registered as singleton with the given implementation type when calling <see cref="DependencyInjection.ServiceCollectionExtensions.AddServices(IServiceCollection, Action{ServiceRegistrationOptions})"/>
         /// with <see cref="ServiceRegistrationOptionsExtensions.AddAttributeServiceRegistrationProviders(ServiceRegistrationOptions)"/> called on the <see cref="ServiceRegistrationOptions"/> builder action
         /// </summary>
         /// <param name="implementationType">The type to use as implementation for this service</param>
