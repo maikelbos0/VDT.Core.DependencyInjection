@@ -9,12 +9,11 @@
 
 	<PropertyGroup>
 		<PackageId>VDT.Core.DependencyInjection</PackageId>
-		<Version>4.0.0</Version>
+		<Version>4.1.0</Version>
 		<Title>VDT.Core.DependencyInjection</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Flexible dependency injection extensions for convention-based service registration, attribute-based service registration, custom automatic service registration and decorator pattern</Description>
-		<PackageReleaseNotes>- Replaced ServiceTypeProvider / ServiceLifetimeProvider with ServiceRegistrationProvider that returns both service type and optional lifetime
-- Remove obsolete methods for registering services with a separate, third, implementation service type argument</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added implementation only attributes for more easily registering a service implementation as itself</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2021 Maikel Bos</Copyright>
