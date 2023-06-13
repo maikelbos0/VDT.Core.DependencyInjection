@@ -120,16 +120,19 @@ public class Startup {
 ## Attribute-based service registration
 
 The extension method `Attributes.ServiceRegistrationOptionsExtensions.AddAttributeServiceRegistrationProviders` allows you to move registration for your 
-services from the `Startup` class to the services themselves without using convention-based registration. Simply mark your services or service implementations
-with the different types of service attributes to indicate that a service should be registered and use the options extension to add the correct providers.
+services from the `Startup` class to the services themselves. Simply mark your services or service implementations with the different types of service 
+attributes to indicate that a service should be registered and use the options extension to add the correct providers.
 
-There are six attributes available:
-- `Attributes.TransientServiceAttribute` marks a service to be registered as a transient service with the supplied implementation type
-- `Attributes.ScopedServiceAttribute` marks a service to be registered as a scoped service with the supplied implementation type
-- `Attributes.SingletoncopedServiceAttribute` marks a service to be registered as a singleton service with the supplied implementation type
-- `Attributes.TransientServiceImplementationAttribute` marks the implementation to be registered as a transient service under the supplied service type
-- `Attributes.ScopedServiceImplementationAttribute` marks the implementation to be registered as a scoped service under the supplied service type
-- `Attributes.SingletonServiceImplementationAttribute` marks the implementation to be registered as a singleton service under the supplied service type
+There are nine attributes available:
+- `Attributes.TransientAttribute` marks a service to be registered as transient
+- `Attributes.ScopedAttribute` marks a service to be registered as scoped
+- `Attributes.SingletonServiceAttribute` marks a service to be registered as singleton
+- `Attributes.TransientServiceAttribute` marks a service to be registered as transient with the supplied implementation type
+- `Attributes.ScopedServiceAttribute` marks a service to be registered as scoped with the supplied implementation type
+- `Attributes.SingletonScopedServiceAttribute` marks a service to be registered as singleton with the supplied implementation type
+- `Attributes.TransientServiceImplementationAttribute` marks a service implementation to be registered as transient for the supplied service type
+- `Attributes.ScopedServiceImplementationAttribute` marks the implementation to be registered as scoped for the supplied service type
+- `Attributes.SingletonServiceImplementationAttribute` marks the implementation to be registered as singleton for the supplied service type
 
 The extension methods `Attributes.ServiceCollectionExtensions.AddAttributeServices` are convenience methods that you can use if you don't need any other
 service registration providers or additional setup of service registration.
