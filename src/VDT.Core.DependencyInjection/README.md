@@ -131,8 +131,8 @@ There are nine attributes available:
 - `Attributes.ScopedServiceAttribute` marks a service to be registered as scoped with the supplied implementation type
 - `Attributes.SingletonScopedServiceAttribute` marks a service to be registered as singleton with the supplied implementation type
 - `Attributes.TransientServiceImplementationAttribute` marks a service implementation to be registered as transient for the supplied service type
-- `Attributes.ScopedServiceImplementationAttribute` marks the implementation to be registered as scoped for the supplied service type
-- `Attributes.SingletonServiceImplementationAttribute` marks the implementation to be registered as singleton for the supplied service type
+- `Attributes.ScopedServiceImplementationAttribute` marks a service implementation to be registered as scoped for the supplied service type
+- `Attributes.SingletonServiceImplementationAttribute` marks a service implementation to be registered as singleton for the supplied service type
 
 The extension methods `Attributes.ServiceCollectionExtensions.AddAttributeServices` are convenience methods that you can use if you don't need any other
 service registration providers or additional setup of service registration.

@@ -13,7 +13,7 @@
 		<Title>VDT.Core.DependencyInjection</Title>
 		<PackageIcon>icon_128.png</PackageIcon>
 		<Description>Flexible dependency injection extensions for convention-based service registration, attribute-based service registration, custom automatic service registration and decorator pattern</Description>
-		<PackageReleaseNotes>- Added implementation only attributes for more easily registering a service implementation as itself</PackageReleaseNotes>
+		<PackageReleaseNotes>- Added attributes that don't need an additional type for more easily registering a service as itself</PackageReleaseNotes>
 		<Authors>Maikel Bos</Authors>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<Copyright>Copyright © 2021 Maikel Bos</Copyright>
