@@ -8,7 +8,7 @@ namespace VDT.Core.DependencyInjection.Attributes {
     /// </summary>
     /// <remarks>Services registered with this attribute can not be decorated</remarks>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public sealed class TransientAttribute : Attribute, IImplementationOnlyAttribute {
+    public sealed class TransientAttribute : Attribute, IAttribute {
         /// <summary>
         /// The lifetime of services marked with this attribute is <see cref="ServiceLifetime.Transient"/>
         /// </summary>

@@ -56,8 +56,8 @@ namespace VDT.Core.DependencyInjection.Attributes {
         public static ServiceRegistrationOptions AddAttributeServiceRegistrationProviders(this ServiceRegistrationOptions options) {
             // Attributes on implementation only types
             options.AddServiceRegistrationProvider(
-                implementationType => implementationType.GetCustomAttributes(typeof(IImplementationOnlyAttribute), false)
-                    .Cast<IImplementationOnlyAttribute>()
+                implementationType => implementationType.GetCustomAttributes(typeof(IAttribute), false)
+                    .Cast<IAttribute>()
                     .Select(attribute => new ServiceRegistration(implementationType, attribute.ServiceLifetime))
             );
 
