@@ -54,6 +54,13 @@ namespace VDT.Core.DependencyInjection.Attributes {
         /// <param name="options">The options for registering services</param>
         /// <returns>A reference to this instance after the operation has completed</returns>
         public static ServiceRegistrationOptions AddAttributeServiceRegistrationProviders(this ServiceRegistrationOptions options) {
+            // Attributes on implementation only types
+            options.AddServiceRegistrationProvider(
+                implementationType => implementationType.GetCustomAttributes(typeof(IAttribute), false)
+                    .Cast<IAttribute>()
+                    .Select(attribute => new ServiceRegistration(implementationType, attribute.ServiceLifetime))
+            );
+
             // Attributes on implementation types
             options.AddServiceRegistrationProvider(
                 implementationType => implementationType.GetCustomAttributes(typeof(IServiceImplementationAttribute), false)

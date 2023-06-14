@@ -66,6 +66,21 @@ namespace VDT.Core.DependencyInjection.Tests.Attributes {
         }
 
         [Fact]
+        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Attributes() {
+            var services = new ServiceCollection();
+
+            services.AddServices(options => {
+                options.AddAttributeServiceRegistrationProviders();
+                options.Assemblies.Add(typeof(AttributeTarget).Assembly);
+            });
+
+            var service = Assert.Single(services, s => s.ImplementationType == typeof(AttributeTarget));
+
+            Assert.Equal(typeof(AttributeTarget), service.ServiceType);
+            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
+        }
+
+        [Fact]
         public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_ImplementationServiceAttributes() {
             var services = new ServiceCollection();
 
