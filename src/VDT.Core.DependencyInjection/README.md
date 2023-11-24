@@ -147,7 +147,7 @@ public interface IBar {
     void Foo();
 }
 
-public class Bar {
+public class Bar : IBar {
     public void Foo() {
         // ...
     }
@@ -159,7 +159,7 @@ public interface IBar {
 
 // Mark the implementation
 [ScopedServiceImplementation(serviceType: typeof(IBar))]
-public class Bar {
+public class Bar : IBar {
     public void Foo() {
         // ...
     }
