@@ -19,7 +19,7 @@ namespace VDT.Core.DependencyInjection {
         public List<ServiceRegistrationProvider> ServiceRegistrationProviders { get; set; } = new List<ServiceRegistrationProvider>();
 
         /// <summary>
-        /// Service lifetime to use if no <see cref="ServiceLifetimeProvider"/> is provided or the <see cref="ServiceLifetimeProvider"/> did not find a suitable lifetime
+        /// Service lifetime to use if a <see cref="ServiceRegistrationProvider"/> provides a <see cref="ServiceRegistration"/> without a <see cref="ServiceLifetime"/>
         /// </summary>
         public ServiceLifetime DefaultServiceLifetime { get; set; } = ServiceLifetime.Scoped;
 
