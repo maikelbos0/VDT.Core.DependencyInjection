@@ -14,18 +14,12 @@ namespace VDT.Core.DependencyInjection {
         public List<Assembly> Assemblies { get; set; } = new List<Assembly>();
 
         /// <summary>
-        /// Options for methods that return service types for a given implementation type; service types that are returned by any method will be registered
-        /// </summary>
-        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This property will be removed in a future version.")]
-        public List<ServiceTypeProviderOptions> ServiceTypeProviders { get; set; } = new List<ServiceTypeProviderOptions>();
-
-        /// <summary>
         /// Methods that return service types for a given implementation type; service types that are returned by any method will be registered
         /// </summary>
         public List<ServiceRegistrationProvider> ServiceRegistrationProviders { get; set; } = new List<ServiceRegistrationProvider>();
 
         /// <summary>
-        /// Service lifetime to use if no <see cref="ServiceLifetimeProvider"/> is provided or the <see cref="ServiceLifetimeProvider"/> did not find a suitable lifetime
+        /// Service lifetime to use if a <see cref="ServiceRegistrationProvider"/> provides a <see cref="ServiceRegistration"/> without a <see cref="ServiceLifetime"/>
         /// </summary>
         public ServiceLifetime DefaultServiceLifetime { get; set; } = ServiceLifetime.Scoped;
 
@@ -100,35 +94,6 @@ namespace VDT.Core.DependencyInjection {
         /// <remarks>When using decorators, the service types must differ from the implementation type</remarks>
         public ServiceRegistrationOptions AddServiceRegistrationProvider(ServiceRegistrationProvider serviceRegistrationProvider) {
             ServiceRegistrationProviders.Add(serviceRegistrationProvider);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Add a method that return service types to be registered for a given implementation type
-        /// </summary>
-        /// <param name="serviceTypeProvider">Method that returns service types for a given implementation type</param>
-        /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>When using decorators, the service types must differ from the implementation type</remarks>
-        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This method will be removed in a future version.")]
-        public ServiceRegistrationOptions AddServiceTypeProvider(ServiceTypeProvider serviceTypeProvider) {
-            ServiceTypeProviders.Add(new ServiceTypeProviderOptions(serviceTypeProvider));
-
-            return this;
-        }
-
-        /// <summary>
-        /// Add a method that return service types to be registered for a given implementation type with a given lifetime provider
-        /// </summary>
-        /// <param name="serviceTypeProvider">Method that returns service types for a given implementation type</param>
-        /// <param name="serviceLifetimeProvider">Method that returns a service lifetime for a given service and implementation type to be registered</param>
-        /// <returns>A reference to this instance after the operation has completed</returns>
-        /// <remarks>When using decorators, the service types must differ from the implementation type</remarks>
-        [Obsolete($"The separate delegates {nameof(ServiceTypeProvider)} and {nameof(ServiceLifetimeProvider)} have been deprecated; they have been replaced by the delegate {nameof(ServiceRegistrationProvider)} that returns both the service type and lifetime. This method will be removed in a future version.")]
-        public ServiceRegistrationOptions AddServiceTypeProvider(ServiceTypeProvider serviceTypeProvider, ServiceLifetimeProvider serviceLifetimeProvider) {
-            ServiceTypeProviders.Add(new ServiceTypeProviderOptions(serviceTypeProvider) {
-                ServiceLifetimeProvider = serviceLifetimeProvider
-            });
 
             return this;
         }

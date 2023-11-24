@@ -66,27 +66,6 @@ namespace VDT.Core.DependencyInjection.Tests {
         }
 
         [Fact]
-        public void AddServiceTypeProvider_Adds_ServiceTypeProvider() {
-            ServiceTypeProvider serviceTypeProvider = implementationType => Enumerable.Empty<Type>();
-            var options = new ServiceRegistrationOptions();
-
-            Assert.Equal(options, options.AddServiceTypeProvider(serviceTypeProvider));
-            Assert.Equal(serviceTypeProvider, Assert.Single(options.ServiceTypeProviders).ServiceTypeProvider);
-            Assert.Null(Assert.Single(options.ServiceTypeProviders).ServiceLifetimeProvider);
-        }
-
-        [Fact]
-        public void AddServiceTypeProvider_Adds_ServiceTypeProvider_With_ServiceLifetimeProvider() {
-            ServiceTypeProvider serviceTypeProvider = implementationType => Enumerable.Empty<Type>();
-            ServiceLifetimeProvider serviceLifetimeProvider = (serviceType, implementationType) => ServiceLifetime.Scoped;
-            var options = new ServiceRegistrationOptions();
-
-            Assert.Equal(options, options.AddServiceTypeProvider(serviceTypeProvider, serviceLifetimeProvider));
-            Assert.Equal(serviceTypeProvider, Assert.Single(options.ServiceTypeProviders).ServiceTypeProvider);
-            Assert.Equal(serviceLifetimeProvider, Assert.Single(options.ServiceTypeProviders).ServiceLifetimeProvider);
-        }
-
-        [Fact]
         public void UseDefaultServiceLifetime_Sets_DefaultServiceLifetime() {
             var options = new ServiceRegistrationOptions();
 
