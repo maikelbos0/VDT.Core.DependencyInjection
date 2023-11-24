@@ -41,9 +41,8 @@ namespace VDT.Core.DependencyInjection {
         private static IEnumerable<ServiceContext> GetServices(ServiceRegistrationOptions options) {
             return options
                 .Assemblies
-                .SelectMany(a => options.ServiceTypeProviders.Select(p => new { Assembly = a, ServiceTypeProvider = p }))
-                .SelectMany(x => GetServices(x.Assembly, x.ServiceTypeProvider, options.DefaultServiceLifetime))
-                .Union(options.Assemblies.SelectMany(assembly => options.ServiceRegistrationProviders.SelectMany(serviceRegistrationProvider => GetServices(assembly, serviceRegistrationProvider, options.DefaultServiceLifetime))));
+                .SelectMany(assembly => options.ServiceRegistrationProviders
+                    .SelectMany(serviceRegistrationProvider => GetServices(assembly, serviceRegistrationProvider, options.DefaultServiceLifetime)));
         }
 
         private static IEnumerable<ServiceContext> GetServices(Assembly assembly, ServiceRegistrationProvider provider, ServiceLifetime defaultServiceLifetime) {
@@ -55,20 +54,6 @@ namespace VDT.Core.DependencyInjection {
                         serviceRegistration.ServiceType,
                         implementationType,
                         serviceLifetime: serviceRegistration.ServiceLifetime ?? defaultServiceLifetime
-                    ))
-                );
-        }
-
-        private static IEnumerable<ServiceContext> GetServices(Assembly assembly, ServiceTypeProviderOptions options, ServiceLifetime defaultServiceLifetime) {
-            return assembly
-                .GetTypes()
-                .Where(t => !t.IsInterface && !t.IsAbstract && !t.IsGenericTypeDefinition)
-                .SelectMany(implementationType => options
-                    .ServiceTypeProvider(implementationType)
-                    .Select(serviceType => new ServiceContext(
-                        serviceType, 
-                        implementationType, 
-                        serviceLifetime: options.ServiceLifetimeProvider?.Invoke(serviceType, implementationType) ?? defaultServiceLifetime
                     ))
                 );
         }

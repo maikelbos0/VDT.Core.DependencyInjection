@@ -32,19 +32,6 @@ namespace VDT.Core.DependencyInjection.Tests {
         }
         
         [Fact]
-        public void AddServices_Uses_DefaultServiceLifetime_If_No_ServiceLifetimeProvider_Supplied() {
-            var services = new ServiceCollection();
-            
-            services.AddServices(options => {
-                options.Assemblies.Add(typeof(NamedService).Assembly);
-                options.ServiceTypeProviders.Add(new ServiceTypeProviderOptions(t => t.GetInterfaces().Where(i => i != typeof(IGenericInterface))));
-                options.DefaultServiceLifetime = ServiceLifetime.Singleton;
-            });
-
-            Assert.Equal(ServiceLifetime.Singleton, services.Single(s => s.ServiceType == typeof(INamedService)).Lifetime);
-        }
-
-        [Fact]
         public void AddServices_Uses_ServiceRegistrar_If_Provided() {
             var services = new ServiceCollection();
 
@@ -72,20 +59,6 @@ namespace VDT.Core.DependencyInjection.Tests {
 
             Assert.Equal(typeof(NamedService), service.ImplementationType);
             Assert.Equal(ServiceLifetime.Scoped, service.Lifetime);
-        }
-
-        [Fact]
-        public void AddServices_Adds_Services_From_All_ServiceTypeProviders() {
-            var services = new ServiceCollection();
-
-            services.AddServices(options => {
-                options.Assemblies.Add(typeof(NamedService).Assembly);
-                options.ServiceTypeProviders.Add(new ServiceTypeProviderOptions(t => t.GetInterfaces().Where(i => i == typeof(IGenericInterface))));
-                options.ServiceTypeProviders.Add(new ServiceTypeProviderOptions(t => t.GetInterfaces().Where(i => i != typeof(IGenericInterface))));
-            });
-
-            Assert.Contains(services, s => s.ServiceType == typeof(INamedService));
-            Assert.Contains(services, s => s.ServiceType == typeof(IGenericInterface));
         }
 
         [Fact]
