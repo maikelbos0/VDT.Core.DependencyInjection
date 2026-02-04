@@ -16,8 +16,8 @@ public abstract class DecoratorInterceptorTests<TTarget> where TTarget : class, 
 
     public DecoratorInterceptorTests() {
         decorator = Substitute.For<IDecorator>();
-        interceptor = new DecoratorInterceptor(decorator, method => shouldIntercept);
-        target = new TTarget();
+        interceptor = new(decorator, method => shouldIntercept);
+        target = new();
         proxy = new ProxyGenerator().CreateClassProxyWithTarget(target, interceptor);
     }
 

@@ -12,7 +12,7 @@ public sealed class ServiceCollectionExtensionsTests {
 
     public ServiceCollectionExtensionsTests() {
         services = [];
-        decorator = new TestDecorator();
+        decorator = new();
 
         services.AddSingleton(decorator);
     }
