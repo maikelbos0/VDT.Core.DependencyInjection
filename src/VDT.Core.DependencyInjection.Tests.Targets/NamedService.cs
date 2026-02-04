@@ -1,3 +1,3 @@
-﻿namespace VDT.Core.DependencyInjection.Tests.Targets {
-    public class NamedService : INamedService, IGenericInterface { }
-}
+﻿namespace VDT.Core.DependencyInjection.Tests.Targets;
+
+public class NamedService : INamedService, IGenericInterface { }

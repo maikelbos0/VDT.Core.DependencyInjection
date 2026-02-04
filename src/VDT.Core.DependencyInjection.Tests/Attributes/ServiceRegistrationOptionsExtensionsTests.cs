@@ -3,81 +3,81 @@ using VDT.Core.DependencyInjection.Attributes;
 using VDT.Core.DependencyInjection.Tests.Attributes.Targets;
 using Xunit;
 
-namespace VDT.Core.DependencyInjection.Tests.Attributes {
-    public class ServiceRegistrationOptionsExtensionsTests {
-        [Fact]
-        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Attributes() {
-            var services = new ServiceCollection();
+namespace VDT.Core.DependencyInjection.Tests.Attributes;
 
-            services.AddServices(options => {
-                options.AddAttributeServiceRegistrationProviders();
-                options.Assemblies.Add(typeof(AttributeTarget).Assembly);
-            });
+public class ServiceRegistrationOptionsExtensionsTests {
+    [Fact]
+    public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Attributes() {
+        var services = new ServiceCollection();
 
-            var service = Assert.Single(services, s => s.ImplementationType == typeof(AttributeTarget));
+        services.AddServices(options => {
+            options.AddAttributeServiceRegistrationProviders();
+            options.Assemblies.Add(typeof(AttributeTarget).Assembly);
+        });
 
-            Assert.Equal(typeof(AttributeTarget), service.ServiceType);
-            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
-        }
+        var service = Assert.Single(services, s => s.ImplementationType == typeof(AttributeTarget));
 
-        [Fact]
-        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_ImplementationServiceAttributes() {
-            var services = new ServiceCollection();
+        Assert.Equal(typeof(AttributeTarget), service.ServiceType);
+        Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
+    }
 
-            services.AddServices(options => {
-                options.AddAttributeServiceRegistrationProviders();
-                options.Assemblies.Add(typeof(AttributeServiceImplementationTarget).Assembly);
-            });
+    [Fact]
+    public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_ImplementationServiceAttributes() {
+        var services = new ServiceCollection();
 
-            var service = Assert.Single(services, s => s.ImplementationType == typeof(AttributeServiceImplementationTarget));
+        services.AddServices(options => {
+            options.AddAttributeServiceRegistrationProviders();
+            options.Assemblies.Add(typeof(AttributeServiceImplementationTarget).Assembly);
+        });
 
-            Assert.Equal(typeof(IAttributeServiceImplementationTarget), service.ServiceType);
-            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
-        }
+        var service = Assert.Single(services, s => s.ImplementationType == typeof(AttributeServiceImplementationTarget));
 
-        [Fact]
-        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Interface_ServiceAttributes() {
-            var services = new ServiceCollection();
+        Assert.Equal(typeof(IAttributeServiceImplementationTarget), service.ServiceType);
+        Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
+    }
 
-            services.AddServices(options => {
-                options.AddAttributeServiceRegistrationProviders();
-                options.Assemblies.Add(typeof(IAttributeServiceInterfaceTarget).Assembly);
-            });
+    [Fact]
+    public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Interface_ServiceAttributes() {
+        var services = new ServiceCollection();
 
-            var service = Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget));
+        services.AddServices(options => {
+            options.AddAttributeServiceRegistrationProviders();
+            options.Assemblies.Add(typeof(IAttributeServiceInterfaceTarget).Assembly);
+        });
 
-            Assert.Equal(typeof(AttributeServiceInterfaceTarget), service.ImplementationType);
-            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
-        }
+        var service = Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget));
 
-        [Fact]
-        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Base_Class_ServiceAttributes() {
-            var services = new ServiceCollection();
+        Assert.Equal(typeof(AttributeServiceInterfaceTarget), service.ImplementationType);
+        Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
+    }
 
-            services.AddServices(options => {
-                options.AddAttributeServiceRegistrationProviders();
-                options.Assemblies.Add(typeof(AttributeServiceBaseClassTargetBase).Assembly);
-            });
+    [Fact]
+    public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Base_Class_ServiceAttributes() {
+        var services = new ServiceCollection();
 
-            var service = Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceBaseClassTargetBase));
+        services.AddServices(options => {
+            options.AddAttributeServiceRegistrationProviders();
+            options.Assemblies.Add(typeof(AttributeServiceBaseClassTargetBase).Assembly);
+        });
 
-            Assert.Equal(typeof(AttributeServiceBaseClassTarget), service.ImplementationType);
-            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
-        }
+        var service = Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceBaseClassTargetBase));
 
-        [Fact]
-        public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Implementation_Only_ServiceAttributes() {
-            var services = new ServiceCollection();
+        Assert.Equal(typeof(AttributeServiceBaseClassTarget), service.ImplementationType);
+        Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
+    }
 
-            services.AddServices(options => {
-                options.AddAttributeServiceRegistrationProviders();
-                options.Assemblies.Add(typeof(AttributeServiceBaseClassTargetBase).Assembly);
-            });
+    [Fact]
+    public void AddAttributeServiceRegistrationProviders_ServiceRegistrationProviders_Find_Implementation_Only_ServiceAttributes() {
+        var services = new ServiceCollection();
 
-            var service = Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceImplementationOnlyTarget));
+        services.AddServices(options => {
+            options.AddAttributeServiceRegistrationProviders();
+            options.Assemblies.Add(typeof(AttributeServiceBaseClassTargetBase).Assembly);
+        });
 
-            Assert.Equal(typeof(AttributeServiceImplementationOnlyTarget), service.ImplementationType);
-            Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
-        }
+        var service = Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceImplementationOnlyTarget));
+
+        Assert.Equal(typeof(AttributeServiceImplementationOnlyTarget), service.ImplementationType);
+        Assert.Equal(ServiceLifetime.Singleton, service.Lifetime);
     }
 }

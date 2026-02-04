@@ -3,26 +3,26 @@ using VDT.Core.DependencyInjection.Attributes;
 using VDT.Core.DependencyInjection.Tests.Attributes.Targets;
 using Xunit;
 
-namespace VDT.Core.DependencyInjection.Tests.Attributes {
-    public class ServiceCollectionExtensionsTests {
-        [Fact]
-        public void AddAttributeServices_Adds_Services() {
-            var services = new ServiceCollection();
+namespace VDT.Core.DependencyInjection.Tests.Attributes;
 
-            services.AddAttributeServices(typeof(IAttributeServiceInterfaceTarget).Assembly);
+public class ServiceCollectionExtensionsTests {
+    [Fact]
+    public void AddAttributeServices_Adds_Services() {
+        var services = new ServiceCollection();
 
-            Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget));
-            Assert.DoesNotContain(services, s => s.ServiceType == typeof(AttributeServiceInterfaceTarget));
-        }
+        services.AddAttributeServices(typeof(IAttributeServiceInterfaceTarget).Assembly);
 
-        [Fact]
-        public void AddAttributeServices_Adds_Services_With_Decorators() {
-            var services = new ServiceCollection();
+        Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget));
+        Assert.DoesNotContain(services, s => s.ServiceType == typeof(AttributeServiceInterfaceTarget));
+    }
 
-            services.AddAttributeServices(typeof(IAttributeServiceInterfaceTarget).Assembly, options => options.AddAttributeDecorators());
+    [Fact]
+    public void AddAttributeServices_Adds_Services_With_Decorators() {
+        var services = new ServiceCollection();
 
-            Assert.NotNull(Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget)).ImplementationFactory);
-            Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceInterfaceTarget));
-        }
+        services.AddAttributeServices(typeof(IAttributeServiceInterfaceTarget).Assembly, options => options.AddAttributeDecorators());
+
+        Assert.NotNull(Assert.Single(services, s => s.ServiceType == typeof(IAttributeServiceInterfaceTarget)).ImplementationFactory);
+        Assert.Single(services, s => s.ServiceType == typeof(AttributeServiceInterfaceTarget));
     }
 }
