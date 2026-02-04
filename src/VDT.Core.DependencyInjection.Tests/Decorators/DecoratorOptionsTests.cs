@@ -46,8 +46,8 @@ public sealed class DecoratorOptionsTests {
     public void AddAttributeDecorators_Works() {
         options.AddAttributeDecorators();
 
-        Assert.Single(options.Policies.Where(policy => policy.Predicate(serviceDecoratedMethod)));
-        Assert.Single(options.Policies.Where(policy => policy.Predicate(implementationDecoratedMethod)));
-        Assert.Empty(options.Policies.Where(policy => policy.Predicate(undecoratedMethod)));
+        Assert.Single(options.Policies, policy => policy.Predicate(serviceDecoratedMethod));
+        Assert.Single(options.Policies, policy => policy.Predicate(implementationDecoratedMethod));
+        Assert.DoesNotContain(options.Policies, policy => policy.Predicate(undecoratedMethod));
     }
 }

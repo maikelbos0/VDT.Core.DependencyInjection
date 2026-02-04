@@ -43,8 +43,8 @@ public abstract class DecoratorInterceptorTests<TTarget> where TTarget : class, 
         Assert.Equal(typeof(TTarget), context.TargetType);
         Assert.Equal(target, context.Target);
         Assert.Equal(typeof(TTarget), context.Method.DeclaringType);
-        Assert.Equal(new object[] { 42, "Foo" }, context.Arguments);
-        Assert.Equal(new[] { typeof(int) }, context.GenericArguments);
+        Assert.Equal([42, "Foo"], context.Arguments);
+        Assert.Equal([typeof(int)], context.GenericArguments);
     }
 
     [Fact]
@@ -74,8 +74,8 @@ public abstract class DecoratorInterceptorTests<TTarget> where TTarget : class, 
         Assert.Equal(typeof(TTarget), context.TargetType);
         Assert.Equal(target, context.Target);
         Assert.Equal(typeof(TTarget), context.Method.DeclaringType);
-        Assert.Equal(new object[] { 42, "Foo" }, context.Arguments);
-        Assert.Equal(new[] { typeof(int) }, context.GenericArguments);
+        Assert.Equal([42, "Foo"], context.Arguments);
+        Assert.Equal([typeof(int)], context.GenericArguments);
     }
 
     [Fact]

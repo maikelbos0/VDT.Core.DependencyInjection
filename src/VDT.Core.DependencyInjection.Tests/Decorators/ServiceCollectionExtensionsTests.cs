@@ -11,7 +11,7 @@ public sealed class ServiceCollectionExtensionsTests {
     private readonly TestDecorator decorator;
 
     public ServiceCollectionExtensionsTests() {
-        services = new ServiceCollection();
+        services = [];
         decorator = new TestDecorator();
 
         services.AddSingleton(decorator);
@@ -188,9 +188,9 @@ public sealed class ServiceCollectionExtensionsTests {
 
         var serviceProvider = services.BuildServiceProvider();
 
-        using (var scope = serviceProvider.CreateScope()) {
-            Assert.Same(scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>(), scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>());
-        }
+        using var scope = serviceProvider.CreateScope();
+
+        Assert.Same(scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>(), scope.ServiceProvider.GetRequiredService<IServiceCollectionTarget>());
     }
 
     [Fact]

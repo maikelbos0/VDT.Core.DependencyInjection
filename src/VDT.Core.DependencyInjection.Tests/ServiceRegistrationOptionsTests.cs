@@ -18,7 +18,7 @@ public class ServiceRegistrationOptionsTests {
     public void AddAssemblies_Adds_Assemblies_Enumerable() {
         var options = new ServiceRegistrationOptions();
 
-        Assert.Equal(options, options.AddAssemblies(new[] { typeof(NamedService).Assembly, typeof(ServiceRegistrationOptionsTests).Assembly }));
+        Assert.Equal(options, options.AddAssemblies([typeof(NamedService).Assembly, typeof(ServiceRegistrationOptionsTests).Assembly]));
         Assert.Equal(new[] { typeof(NamedService).Assembly, typeof(ServiceRegistrationOptionsTests).Assembly }, options.Assemblies);
     }
 
@@ -58,7 +58,7 @@ public class ServiceRegistrationOptionsTests {
 
     [Fact]
     public void AddServiceRegistrationProvider_Adds_ServiceRegistrationProvider() {
-        ServiceRegistrationProvider serviceRegistrationProvider = implementationType => Enumerable.Empty<ServiceRegistration>();
+        ServiceRegistrationProvider serviceRegistrationProvider = implementationType => [];
         var options = new ServiceRegistrationOptions();
 
         Assert.Equal(options, options.AddServiceRegistrationProvider(serviceRegistrationProvider));
