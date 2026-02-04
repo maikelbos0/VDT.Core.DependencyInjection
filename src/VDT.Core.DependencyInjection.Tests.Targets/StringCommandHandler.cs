@@ -1,3 +1,3 @@
-﻿namespace VDT.Core.DependencyInjection.Tests.Targets {
-    public class StringCommandHandler : CommandHandler<string> { }
-}
+﻿namespace VDT.Core.DependencyInjection.Tests.Targets;
+
+public class StringCommandHandler : CommandHandler<string> { }

@@ -2,101 +2,101 @@
 using VDT.Core.DependencyInjection.Tests.Targets;
 using Xunit;
 
-namespace VDT.Core.DependencyInjection.Tests {
-    public class DefaultServiceRegistrationProvidersTests {
-        [Fact]
-        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Single_Interface_If_Found() {
-            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
+namespace VDT.Core.DependencyInjection.Tests;
 
-            var serviceRegistration = Assert.Single(provider(typeof(DefaultSingleInterfaceService)));
+public class DefaultServiceRegistrationProvidersTests {
+    [Fact]
+    public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Single_Interface_If_Found() {
+        var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
 
-            Assert.Equal(typeof(ISingleInterfaceService), serviceRegistration.ServiceType);
-            Assert.Null(serviceRegistration.ServiceLifetime);
-        }
+        var serviceRegistration = Assert.Single(provider(typeof(DefaultSingleInterfaceService)));
 
-        [Theory]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(null)]
-        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(serviceLifetime);
+        Assert.Equal(typeof(ISingleInterfaceService), serviceRegistration.ServiceType);
+        Assert.Null(serviceRegistration.ServiceLifetime);
+    }
 
-            Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(DefaultSingleInterfaceService))).ServiceLifetime);
-        }
+    [Theory]
+    [InlineData(ServiceLifetime.Scoped)]
+    [InlineData(null)]
+    public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+        var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider(serviceLifetime);
 
-        [Fact]
-        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Interfaces() {
-            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
+        Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(DefaultSingleInterfaceService))).ServiceLifetime);
+    }
 
-            Assert.Empty(provider(typeof(ImplementationOnlyService)));
-        }
+    [Fact]
+    public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Interfaces() {
+        var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
 
-        [Fact]
-        public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Multiple_Interfaces() {
-            var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
+        Assert.Empty(provider(typeof(ImplementationOnlyService)));
+    }
 
-            Assert.Empty(provider(typeof(NamedService)));
-        }
+    [Fact]
+    public void CreateSingleInterfaceProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Multiple_Interfaces() {
+        var provider = DefaultServiceRegistrationProviders.CreateSingleInterfaceProvider();
 
-        [Fact]
-        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Interfaces_By_Name() {
-            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider();
+        Assert.Empty(provider(typeof(NamedService)));
+    }
 
-            var serviceRegistration = Assert.Single(provider(typeof(NamedService)));
+    [Fact]
+    public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Interfaces_By_Name() {
+        var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider();
 
-            Assert.Equal(typeof(INamedService), serviceRegistration.ServiceType);
-            Assert.Null(serviceRegistration.ServiceLifetime);
-        }
+        var serviceRegistration = Assert.Single(provider(typeof(NamedService)));
 
-        [Theory]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(null)]
-        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(serviceLifetime);
+        Assert.Equal(typeof(INamedService), serviceRegistration.ServiceType);
+        Assert.Null(serviceRegistration.ServiceLifetime);
+    }
 
-            Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(NamedService))).ServiceLifetime);
-        }
+    [Theory]
+    [InlineData(ServiceLifetime.Scoped)]
+    [InlineData(null)]
+    public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+        var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider(serviceLifetime);
 
-        [Fact]
-        public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Correctly_Named_Interfaces() {
-            var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider();
+        Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(NamedService))).ServiceLifetime);
+    }
 
-            Assert.Empty(provider(typeof(DefaultSingleInterfaceService)));
-        }
+    [Fact]
+    public void CreateInterfaceByNameProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_No_Correctly_Named_Interfaces() {
+        var provider = DefaultServiceRegistrationProviders.CreateInterfaceByNameProvider();
 
-        [Fact]
-        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_Constructed_Generic_Service_Types() {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>));
+        Assert.Empty(provider(typeof(DefaultSingleInterfaceService)));
+    }
 
-            var serviceRegistration = Assert.Single(provider(typeof(StringCommandHandler)));
+    [Fact]
+    public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_Constructed_Generic_Service_Types() {
+        var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>));
 
-            Assert.Equal(typeof(ICommandHandler<string>), serviceRegistration.ServiceType);
-            Assert.Null(serviceRegistration.ServiceLifetime);
-        }
+        var serviceRegistration = Assert.Single(provider(typeof(StringCommandHandler)));
 
-        [Theory]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(null)]
-        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>), serviceLifetime);
+        Assert.Equal(typeof(ICommandHandler<string>), serviceRegistration.ServiceType);
+        Assert.Null(serviceRegistration.ServiceLifetime);
+    }
 
-            Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(StringCommandHandler))).ServiceLifetime);
-        }
+    [Theory]
+    [InlineData(ServiceLifetime.Scoped)]
+    [InlineData(null)]
+    public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_Correct_ServiceLifetime(ServiceLifetime? serviceLifetime) {
+        var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>), serviceLifetime);
 
-        [Fact]
-        public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Not_Generic_Interface() {
-            var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>));
+        Assert.Equal(serviceLifetime, Assert.Single(provider(typeof(StringCommandHandler))).ServiceLifetime);
+    }
 
-            Assert.Empty(provider(typeof(NamedService)));
-        }
+    [Fact]
+    public void CreateGenericInterfaceRegistrationProvider_Returns_ServiceRegistrationProvider_That_Returns_No_Services_For_Not_Generic_Interface() {
+        var provider = DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(ICommandHandler<>));
 
-        [Fact]
-        public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Unbound_Generic_Type() {
-            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(IGenericInterface)));
-        }
+        Assert.Empty(provider(typeof(NamedService)));
+    }
 
-        [Fact]
-        public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Interface_Types() {
-            Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(CommandHandler<>)));
-        }
+    [Fact]
+    public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Unbound_Generic_Type() {
+        Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(IGenericInterface)));
+    }
+
+    [Fact]
+    public void CreateGenericInterfaceRegistrationProvider_Throws_Exception_When_Not_Passing_Interface_Types() {
+        Assert.Throws<ServiceRegistrationException>(() => DefaultServiceRegistrationProviders.CreateGenericInterfaceRegistrationProvider(typeof(CommandHandler<>)));
     }
 }

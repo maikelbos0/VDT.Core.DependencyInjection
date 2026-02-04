@@ -1,11 +1,11 @@
 ﻿using VDT.Core.DependencyInjection.Decorators;
 
-namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets {
-    public class TestDecorator : IDecorator {
-        public int Calls { get; private set; }
+namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets;
 
-        public void AfterExecute(MethodExecutionContext context) {
-            Calls++;
-        }
+public class TestDecorator : IDecorator {
+    public int Calls { get; private set; }
+
+    public void AfterExecute(MethodExecutionContext context) {
+        Calls++;
     }
 }

@@ -1,3 +1,3 @@
-﻿namespace VDT.Core.DependencyInjection.Tests.Targets {
-    public class ImplementationOnlyService { }
-}
+﻿namespace VDT.Core.DependencyInjection.Tests.Targets;
+
+public class ImplementationOnlyService { }

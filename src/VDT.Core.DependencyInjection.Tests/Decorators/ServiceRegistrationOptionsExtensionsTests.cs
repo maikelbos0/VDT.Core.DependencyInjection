@@ -3,29 +3,29 @@ using VDT.Core.DependencyInjection.Decorators;
 using VDT.Core.DependencyInjection.Tests.Decorators.Targets;
 using Xunit;
 
-namespace VDT.Core.DependencyInjection.Tests.Decorators {
-    public class ServiceRegistrationOptionsExtensionsTests {
-        [Theory]
-        [InlineData(ServiceLifetime.Transient)]
-        [InlineData(ServiceLifetime.Scoped)]
-        [InlineData(ServiceLifetime.Singleton)]
-        public void UseDecoratorServiceRegistrationMethod_Sets_ServiceRegistrationMethod_To_Decorated_AddService_Method(ServiceLifetime serviceLifetime) {
-            var options = new ServiceRegistrationOptions();
-            var services = new ServiceCollection();
+namespace VDT.Core.DependencyInjection.Tests.Decorators;
 
-            services.AddSingleton(new TestDecorator());
+public class ServiceRegistrationOptionsExtensionsTests {
+    [Theory]
+    [InlineData(ServiceLifetime.Transient)]
+    [InlineData(ServiceLifetime.Scoped)]
+    [InlineData(ServiceLifetime.Singleton)]
+    public void UseDecoratorServiceRegistrationMethod_Sets_ServiceRegistrationMethod_To_Decorated_AddService_Method(ServiceLifetime serviceLifetime) {
+        var options = new ServiceRegistrationOptions();
+        var services = new ServiceCollection();
 
-            options.UseDecoratorServiceRegistrar(decoratorOptions => decoratorOptions.AddDecorator<TestDecorator>());
+        services.AddSingleton(new TestDecorator());
 
-            Assert.NotNull(options.ServiceRegistrar);
+        options.UseDecoratorServiceRegistrar(decoratorOptions => decoratorOptions.AddDecorator<TestDecorator>());
 
-            options.ServiceRegistrar!(services, typeof(IServiceCollectionTarget), typeof(ServiceCollectionTarget), serviceLifetime);
+        Assert.NotNull(options.ServiceRegistrar);
 
-            var service = Assert.Single(services, service => service.ServiceType == typeof(IServiceCollectionTarget));
+        options.ServiceRegistrar!(services, typeof(IServiceCollectionTarget), typeof(ServiceCollectionTarget), serviceLifetime);
 
-            Assert.Equal(serviceLifetime, service.Lifetime);
-            Assert.NotNull(service.ImplementationFactory);
-            Assert.Equal(serviceLifetime, Assert.Single(services, service => service.ServiceType == typeof(ServiceCollectionTarget)).Lifetime);
-        }
+        var service = Assert.Single(services, service => service.ServiceType == typeof(IServiceCollectionTarget));
+
+        Assert.Equal(serviceLifetime, service.Lifetime);
+        Assert.NotNull(service.ImplementationFactory);
+        Assert.Equal(serviceLifetime, Assert.Single(services, service => service.ServiceType == typeof(ServiceCollectionTarget)).Lifetime);
     }
 }

@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 
-namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets {
-    public class ServiceCollectionTarget : ServiceCollectionTargetBase {
-        public override string Value { get; set; } = "Bar";
+namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets;
 
-        public override async Task<string> GetValue() {
-            await Task.Delay(1);
+public class ServiceCollectionTarget : ServiceCollectionTargetBase {
+    public override string Value { get; set; } = "Bar";
 
-            return Value;
-        }
+    public override async Task<string> GetValue() {
+        await Task.Delay(1);
+
+        return Value;
     }
 }

@@ -1,3 +1,3 @@
-﻿namespace VDT.Core.DependencyInjection.Tests.Targets {
-    public class DefaultSingleInterfaceService : ISingleInterfaceService { }
-}
+﻿namespace VDT.Core.DependencyInjection.Tests.Targets;
+
+public class DefaultSingleInterfaceService : ISingleInterfaceService { }

@@ -1,13 +1,10 @@
-﻿namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets {
-    public class DecoratorOptionsTarget : IDecoratorOptionsTarget {
-        public void ServiceDecorated() {
-        }
+﻿namespace VDT.Core.DependencyInjection.Tests.Decorators.Targets;
 
-        [TestDecorator]
-        public void ImplementationDecorated() {
-        }
+public class DecoratorOptionsTarget : IDecoratorOptionsTarget {
+    public void ServiceDecorated() { }
 
-        public void Undecorated() {
-        }
-    }
+    [TestDecorator]
+    public void ImplementationDecorated() { }
+
+    public void Undecorated() { }
 }
