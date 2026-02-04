@@ -6,7 +6,7 @@ public class ServiceCollectionTarget : ServiceCollectionTargetBase {
     public override string Value { get; set; } = "Bar";
 
     public override async Task<string> GetValue() {
-        await Task.Delay(1);
+        await Task.Yield();
 
         return Value;
     }
